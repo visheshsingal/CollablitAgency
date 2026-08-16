@@ -7,6 +7,45 @@
 *{box-sizing:border-box}
 body{font-family:Inter,system-ui,Segoe UI,Arial; margin:0;color:var(--text);background:var(--bg)}
 html { scroll-behavior: smooth; }
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: #fff;
+  color: #0b234a;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(11,35,74,0.12);
+  z-index: 9999;
+}
+
+/* Focus styles for accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(201,162,39,0.28);
+  outline-offset: 3px;
+}
+
+/* Active nav link */
+.nav-link.is-active { color: #0b234a; font-weight:700 }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important }
+}
 .container{max-width:980px;margin:0 auto;padding:32px}
 .nav{background:#fff;border-bottom:1px solid #eee}
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
