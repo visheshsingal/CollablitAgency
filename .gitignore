@@ -1,0 +1,41 @@
+# Node modules
+node_modules/
+
+# Next.js build output
+.next/
+out/
+.build/
+
+# Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Local env files
+.env
+.env.*.local
+.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Production
+dist/
+coverage/
+
+# Misc
+.cache/
+*.seed
+
+# Optional: ignore system files
+*.swp
