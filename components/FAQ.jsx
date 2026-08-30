@@ -62,7 +62,7 @@ export default function FAQ() {
                 <span className="faq-question">{f.q}</span>
                 <span className="faq-icon" aria-hidden="true">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 2V12M2 7H12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                    <path d="M7 2V12M2 7H12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                   </svg>
                 </span>
               </button>

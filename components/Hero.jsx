@@ -38,7 +38,7 @@ export default function Hero() {
         </h1>
 
         <p className="lead">
-          Collablit partners with ambitious brands to plan, design, and build
+          Collablit Solutions partners with ambitious brands to plan, design, and build
           the digital presence that gets them noticed — and keeps them growing.
         </p>
 
@@ -46,7 +46,7 @@ export default function Hero() {
           <a href="#services" className="btn">
             Our Services
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
           <a href="#contact" className="btn secondary">Contact Us</a>

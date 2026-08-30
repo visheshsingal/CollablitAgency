@@ -7,7 +7,7 @@ export default function IndexPage() {
   return (
     <div>
       <Head>
-        <title>Collablit</title>
+        <title>Collablit Solutions</title>
       </Head>
       <Navbar />
       <Home />

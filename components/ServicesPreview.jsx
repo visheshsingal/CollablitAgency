@@ -65,7 +65,7 @@ export default function ServicesPreview() {
 
               <span className="row-arrow" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M4 14L14 4M14 4H6M14 4V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4 14L14 4M14 4H6M14 4V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
             </div>
@@ -76,7 +76,7 @@ export default function ServicesPreview() {
           <a href="#services" className="cta-primary">
             View all services
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
         </div>

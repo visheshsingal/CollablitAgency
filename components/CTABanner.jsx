@@ -32,7 +32,7 @@ export default function CTABanner() {
           <a href="#contact" className="btn-primary">
             Get in Touch
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
           <a href="#projects" className="btn-white">See Our Work</a>

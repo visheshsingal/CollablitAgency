@@ -52,9 +52,9 @@ export default function Contact() {
             </p>
 
             <div className="contact-details">
-              <a href="mailto:support@collablit.com" className="detail-item">
+              <a href="mailto:support@Collablit Solutions.com" className="detail-item">
                 <span className="detail-label">Email</span>
-                <span className="detail-value">support@collablit.com</span>
+                <span className="detail-value">support@Collablit Solutions.com</span>
               </a>
               <a href="tel:+919024939664" className="detail-item">
                 <span className="detail-label">Phone</span>
@@ -79,7 +79,7 @@ export default function Contact() {
             <div className="success-state">
               <div className="success-icon">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <path d="M4 11.5L9 16.5L18 6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4 11.5L9 16.5L18 6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
               <h3>Message sent</h3>
@@ -189,7 +189,7 @@ export default function Contact() {
                 {status === 'submitting' ? 'Sending...' : 'Send Message'}
                 {status !== 'submitting' && (
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </button>

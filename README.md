@@ -1,6 +1,6 @@
-# Collablit Agency (Next.js)
+# Collablit Solutions Agency (Next.js)
 
-Simple Next.js scaffold for Collablit — a digital agency offering development, design, and social media management.
+Simple Next.js scaffold for Collablit Solutions — a digital agency offering development, design, and social media management.
 
 Getting started:
 

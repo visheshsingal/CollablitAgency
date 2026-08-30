@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="mark">
                 <span className="mark-letter">C</span>
               </span>
-              <span className="brand-word">Collablit</span>
+              <span className="brand-word">Collablit Solutions</span>
             </a>
             <p className="brand-tagline">
               Development, design, and social media management for brands that
@@ -21,22 +21,22 @@ export default function Footer() {
             <div className="social-row">
               <a href="#" aria-label="Instagram" className="social-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" strokeWidth="1.8"/>
-                  <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8"/>
-                  <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/>
+                  <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" strokeWidth="1.8" />
+                  <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
+                  <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
                 </svg>
               </a>
               <a href="#" aria-label="LinkedIn" className="social-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" strokeWidth="1.8"/>
-                  <path d="M7.5 10V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                  <circle cx="7.5" cy="6.8" r="1.1" fill="currentColor"/>
-                  <path d="M11.5 17V13.2C11.5 11.5 12.5 10.5 14 10.5C15.5 10.5 16.3 11.5 16.3 13.2V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  <rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" strokeWidth="1.8" />
+                  <path d="M7.5 10V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="7.5" cy="6.8" r="1.1" fill="currentColor" />
+                  <path d="M11.5 17V13.2C11.5 11.5 12.5 10.5 14 10.5C15.5 10.5 16.3 11.5 16.3 13.2V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </a>
               <a href="#" aria-label="Twitter / X" className="social-link">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 3L21 21M21 3L3 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                  <path d="M3 3L21 21M21 3L3 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
               </a>
             </div>
@@ -60,7 +60,7 @@ export default function Footer() {
 
             <div className="link-group">
               <h4>Contact</h4>
-              <a href="mailto:support@collablit.com">support@collablit.com</a>
+              <a href="mailto:support@Collablit Solutions.com">support@Collablit Solutions.com</a>
               <a href="tel:+919024939664">+91 90249 39664</a>
               <a href="#contact">Send a message →</a>
             </div>
@@ -69,7 +69,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <div className="bottom-left">
-            <p className="copyright">© {year} Collablit. All rights reserved.</p>
+            <p className="copyright">© {year} Collablit Solutions. All rights reserved.</p>
             <div className="bottom-links">
               <a href="#privacy">Privacy Policy</a>
               <span className="dot" aria-hidden="true" />
@@ -82,7 +82,7 @@ export default function Footer() {
             aria-label="Back to top"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M7 11V3M3 6.5L7 2.5L11 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M7 11V3M3 6.5L7 2.5L11 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>

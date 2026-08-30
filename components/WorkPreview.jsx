@@ -37,7 +37,7 @@ export default function WorkPreview() {
         <div className="projects-list">
           {projects.map((p, i) => (
             <article key={p.name} className={`project-row ${i % 2 === 1 ? 'reverse' : ''}`}>
-              
+
               <a
                 href={p.url}
                 target="_blank"
@@ -80,7 +80,7 @@ export default function WorkPreview() {
                 <a href={p.url} target="_blank" rel="noopener noreferrer" className="visit-link">
                   Visit live site
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               </div>
@@ -92,7 +92,7 @@ export default function WorkPreview() {
           <a href="#projects" className="cta-primary">
             See Our Work
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
         </div>

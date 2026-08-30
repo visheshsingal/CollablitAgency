@@ -15,7 +15,7 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    const sections = ['home','services','projects','faq','contact']
+    const sections = ['home', 'services', 'projects', 'faq', 'contact']
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) setActive('#' + e.target.id)
@@ -47,7 +47,7 @@ export default function Navbar() {
             <span className="mark-letter">C</span>
           </span>
           <span className="brand-text">
-            <span className="brand-word">Collablit</span>
+            <span className="brand-word">Collablit Solutions</span>
           </span>
         </a>
 
@@ -76,7 +76,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-        <div className={`mobile-panel ${menuOpen ? 'mobile-panel--open' : ''}`}>
+      <div className={`mobile-panel ${menuOpen ? 'mobile-panel--open' : ''}`}>
         <ul>
           {links.map((l) => (
             <li key={l.href}>
