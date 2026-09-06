@@ -14,10 +14,23 @@ export default function BookMeetingPage() {
     goals: '',
     timeline: '',
     budget: '',
+    meetingDate: '',
+    meetingTime: '',
+    duration: '30 mins',
     message: '',
   })
+
+  const timeSlots = [
+    '9:00 AM – 10:00 AM',
+    '10:30 AM – 11:30 AM',
+    '12:00 PM – 1:00 PM',
+    '2:00 PM – 3:00 PM',
+    '4:00 PM – 5:00 PM',
+    '5:30 PM – 6:30 PM',
+  ]
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
+  const [meetDetails, setMeetDetails] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -42,6 +55,12 @@ export default function BookMeetingPage() {
       }
 
       setStatus('sent')
+      setMeetDetails({
+        link: data.meetLink,
+        date: data.meetingDate,
+        time: data.meetingTime,
+        duration: data.duration,
+      })
       setForm({
         name: '',
         email: '',
@@ -50,6 +69,9 @@ export default function BookMeetingPage() {
         goals: '',
         timeline: '',
         budget: '',
+        meetingDate: '',
+        meetingTime: '',
+        duration: '30 mins',
         message: '',
       })
     } catch (err) {
@@ -96,15 +118,25 @@ export default function BookMeetingPage() {
           </div>
 
           <div className="form-wrap">
-            {status === 'sent' ? (
+            {status === 'sent' && meetDetails ? (
               <div className="success-box">
                 <div className="success-icon">✓</div>
                 <h3>Meeting request sent</h3>
                 <p>
-                  Thanks for sharing the details. We&apos;ll review your agenda and get back
-                  to you soon to confirm the call.
+                  We&apos;ve booked your session and shared the meeting link with both you and our team.
                 </p>
-                <button type="button" className="reset-btn" onClick={() => setStatus('idle')}>
+                <div className="meeting-summary">
+                  <p><strong>Date:</strong> {meetDetails.date}</p>
+                  <p><strong>Time:</strong> {meetDetails.time}</p>
+                  <p><strong>Duration:</strong> {meetDetails.duration}</p>
+                  <a href={meetDetails.link} target="_blank" rel="noreferrer" className="meet-link">
+                    Join Google Meet
+                  </a>
+                </div>
+                <button type="button" className="reset-btn" onClick={() => {
+                  setStatus('idle')
+                  setMeetDetails(null)
+                }}>
                   Send another request
                 </button>
               </div>
@@ -138,6 +170,22 @@ export default function BookMeetingPage() {
 
                 <div className="field-row">
                   <div className="field">
+                    <label htmlFor="meetingDate">Preferred date</label>
+                    <input id="meetingDate" name="meetingDate" type="date" value={form.meetingDate} onChange={handleChange} required />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="meetingTime">Preferred time slot</label>
+                    <select id="meetingTime" name="meetingTime" value={form.meetingTime} onChange={handleChange} required>
+                      <option value="" disabled>Select a time slot</option>
+                      {timeSlots.map((slot) => (
+                        <option key={slot} value={slot}>{slot}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="field-row">
+                  <div className="field">
                     <label htmlFor="timeline">Timeline</label>
                     <input id="timeline" name="timeline" placeholder="e.g. 4-6 weeks" value={form.timeline} onChange={handleChange} required />
                   </div>
@@ -145,6 +193,15 @@ export default function BookMeetingPage() {
                     <label htmlFor="budget">Budget range</label>
                     <input id="budget" name="budget" placeholder="e.g. INR 50k - 1L" value={form.budget} onChange={handleChange} required />
                   </div>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="duration">Meeting duration</label>
+                  <select id="duration" name="duration" value={form.duration} onChange={handleChange}>
+                    <option value="30 mins">30 mins</option>
+                    <option value="45 mins">45 mins</option>
+                    <option value="60 mins">60 mins</option>
+                  </select>
                 </div>
 
                 <div className="field">
@@ -276,7 +333,7 @@ export default function BookMeetingPage() {
           color: #24314d;
         }
 
-        input, textarea {
+        input, textarea, select {
           width: 100%;
           border: 1px solid rgba(19, 40, 73, 0.12);
           border-radius: 12px;
@@ -287,7 +344,7 @@ export default function BookMeetingPage() {
           resize: vertical;
         }
 
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
           border-color: rgba(29, 70, 148, 0.45);
           box-shadow: 0 0 0 4px rgba(29, 70, 148, 0.08);
           outline: none;
@@ -345,6 +402,27 @@ export default function BookMeetingPage() {
           color: #4b5875;
           line-height: 1.7;
           margin: 0;
+        }
+
+        .meeting-summary {
+          margin: 18px 0 20px;
+          padding: 16px;
+          border: 1px solid rgba(29, 70, 148, 0.1);
+          border-radius: 14px;
+          background: rgba(29, 70, 148, 0.03);
+          text-align: left;
+        }
+
+        .meeting-summary p {
+          margin: 0 0 8px;
+        }
+
+        .meet-link {
+          display: inline-block;
+          margin-top: 10px;
+          color: #0b234a;
+          font-weight: 700;
+          text-decoration: underline;
         }
 
         .error-text {
