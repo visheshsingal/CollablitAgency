@@ -11,24 +11,42 @@ export default function Contact() {
     customDesign: '',
     message: '',
   })
-  const [status, setStatus] = useState('idle') // idle | submitting | sent
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({
       ...prev,
       [name]: value,
-      // reset dependent fields when the main service changes
       ...(name === 'project' ? { designType: '', customDesign: '' } : {}),
       ...(name === 'designType' && value !== 'custom' ? { customDesign: '' } : {}),
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('submitting')
-    // Wire this up to your form endpoint / API route
-    setTimeout(() => setStatus('sent'), 900)
+    setError('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'contact', ...form }),
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.message || 'Your message could not be sent.')
+      }
+
+      setStatus('sent')
+      setForm({ name: '', email: '', project: '', designType: '', customDesign: '', message: '' })
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.')
+      setStatus('idle')
+    }
   }
 
   return (
@@ -52,9 +70,9 @@ export default function Contact() {
             </p>
 
             <div className="contact-details">
-              <a href="mailto:support@Collablit Solutions.com" className="detail-item">
+              <a href="mailto:vishesh.singal.contact@gmail.com" className="detail-item">
                 <span className="detail-label">Email</span>
-                <span className="detail-value">support@Collablit Solutions.com</span>
+                <span className="detail-value">vishesh.singal.contact@gmail.com</span>
               </a>
               <a href="tel:+919024939664" className="detail-item">
                 <span className="detail-label">Phone</span>
@@ -184,6 +202,8 @@ export default function Contact() {
                   required
                 />
               </div>
+
+              {error && <p className="error-text">{error}</p>}
 
               <button type="submit" className="submit-btn" disabled={status === 'submitting'}>
                 {status === 'submitting' ? 'Sending...' : 'Send Message'}

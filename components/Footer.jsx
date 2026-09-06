@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Footer() {
   const year = new Date().getFullYear()
 
@@ -8,12 +10,12 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
-            <a href="#home" className="brand">
+            <Link href="/" className="brand">
               <span className="mark">
                 <span className="mark-letter">C</span>
               </span>
               <span className="brand-word">Collablit Solutions</span>
-            </a>
+            </Link>
             <p className="brand-tagline">
               Development, design, and social media management for brands that
               want to grow on purpose, not by accident.
@@ -45,10 +47,9 @@ export default function Footer() {
           <div className="footer-links">
             <div className="link-group">
               <h4>Navigate</h4>
-              <a href="#home">Home</a>
-              <a href="#services">Services</a>
-              <a href="#projects">Projects</a>
-              <a href="#faq">FAQ</a>
+              <Link href="/">Home</Link>
+              <Link href="/testimonials">Testimonials</Link>
+              <Link href="/book-meeting">Book a Meeting</Link>
             </div>
 
             <div className="link-group">
@@ -60,9 +61,9 @@ export default function Footer() {
 
             <div className="link-group">
               <h4>Contact</h4>
-              <a href="mailto:support@Collablit Solutions.com">support@Collablit Solutions.com</a>
+              <a href="mailto:vishesh.singal.contact@gmail.com">vishesh.singal.contact@gmail.com</a>
               <a href="tel:+919024939664">+91 90249 39664</a>
-              <a href="#contact">Send a message →</a>
+              <Link href="/book-meeting">Book a meeting →</Link>
             </div>
           </div>
         </div>

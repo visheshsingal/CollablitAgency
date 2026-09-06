@@ -1,68 +1,50 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
+  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [active, setActive] = useState('#home')
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll()
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    const sections = ['home', 'services', 'projects', 'faq', 'contact']
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) setActive('#' + e.target.id)
-      })
-    }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 })
-
-    sections.forEach(id => {
-      const el = document.getElementById(id)
-      if (el) obs.observe(el)
-    })
-    return () => obs.disconnect()
-  }, [])
 
   const links = [
-    { href: '#home', label: 'Home' },
-    { href: '#services', label: 'Services' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#faq', label: 'FAQ' },
-    { href: '#contact', label: 'Contact' },
+    { href: '/', label: 'Home' },
+    { href: '/testimonials', label: 'Testimonials' },
+    { href: '/book-meeting', label: 'Book a Meeting' },
   ]
 
+  const isActive = (href) => {
+    if (href === '/') {
+      return router.pathname === '/'
+    }
+    return router.pathname === href || router.asPath.startsWith(`${href}/`)
+  }
+
   return (
-    <header className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
+    <header className="nav">
       <div className="nav-ribbon" aria-hidden="true" />
 
       <nav className="nav-inner" aria-label="Primary">
-        <a href="#home" className="brand">
+        <Link href="/" className="brand">
           <span className="mark">
             <span className="mark-letter">C</span>
           </span>
           <span className="brand-text">
             <span className="brand-word">Collablit Solutions</span>
           </span>
-        </a>
+        </Link>
 
         <ul className="nav-links">
           {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className={`nav-link ${active === l.href ? 'is-active' : ''}`} aria-current={active === l.href ? 'page' : undefined}>
+              <Link href={l.href} className={`nav-link ${isActive(l.href) ? 'is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>
                 <span className="nav-link-dot" aria-hidden="true" />
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
-
-        {/* client login and CTA removed per request */}
 
         <button
           className={`burger ${menuOpen ? 'burger--open' : ''}`}
@@ -80,7 +62,7 @@ export default function Navbar() {
         <ul>
           {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</a>
+              <Link href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</Link>
             </li>
           ))}
         </ul>
@@ -103,12 +85,7 @@ export default function Navbar() {
           transition: box-shadow 0.28s ease, transform 0.2s ease;
         }
 
-        .nav--scrolled {
-          transform: translateY(-1px);
-          box-shadow: 0 10px 30px rgba(11, 35, 74, 0.08);
-        }
-
-        .nav-ribbon { height: 3px; width: 100%; background: linear-gradient(90deg,#0b234a,#1d4694 38%,#c9a227 78%);} 
+        .nav-ribbon { height: 3px; width: 100%; background: linear-gradient(90deg,#0b234a,#1d4694 38%,#c9a227 78%); }
 
         .nav-inner {
           max-width: 1280px;
@@ -120,20 +97,17 @@ export default function Navbar() {
           gap: 20px;
         }
 
-        .nav--scrolled .nav-inner { padding: 10px 22px; }
-
         .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
 
-        .mark { width:34px; height:34px; border-radius:8px; background: linear-gradient(155deg,#0e2a5c,#0b1f42); display:flex;align-items:center;justify-content:center; }
+        .mark { position: relative; width:34px; height:34px; border-radius:8px; background: linear-gradient(155deg,#0e2a5c,#0b1f42); display:flex;align-items:center;justify-content:center; overflow:hidden; }
         .mark::after{ content:''; position:absolute; top:0; right:0; width:12px; height:12px; background:linear-gradient(135deg,#e2c068,#c9a227); clip-path:polygon(100% 0,0 0,100% 100%);} 
         .mark-letter{ font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:16px; color:#f4d68a }
 
         .brand-word { font-family:'Fraunces',serif; font-weight:600; font-size:18px; color:#0b234a }
-        .brand-tag { font-family:Inter, sans-serif; font-size:9px; letter-spacing:0.12em; color:#b68d40 }
 
         .nav-links { display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0 }
 
-        .nav-link { position:relative; display:inline-flex; align-items:center; gap:6px; font-family:Inter, sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#35405a; padding:6px 0; transition:color 0.22s ease }
+        .nav-link { position:relative; display:inline-flex; align-items:center; gap:6px; font-family:Inter, sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#35405a; padding:6px 0; transition:color 0.22s ease; text-decoration:none; }
         .nav-link-dot{ width:3px; height:3px; border-radius:50%; background:#c9a227; opacity:0; transform:scale(0); transition:all 0.28s cubic-bezier(.34,1.56,.64,1) }
         .nav-link:hover{ color:#0b234a }
         .nav-link:hover .nav-link-dot{ opacity:1; transform:scale(1) }
@@ -150,7 +124,6 @@ export default function Navbar() {
           .nav-links { display:none }
           .burger { display:flex }
           .nav-inner { padding:12px 14px }
-          .brand-tag { display:none }
         }
       `}</style>
     </header>
