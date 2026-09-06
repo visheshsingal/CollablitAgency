@@ -36,6 +36,16 @@ function formatContactEmail(data) {
 }
 
 function formatMeetingEmail(data, meetLink) {
+  const meetingSummary = `
+    <div style="background:#f7f5ef;border:1px solid #e7dcc0;border-radius:14px;padding:18px 20px;margin:18px 0;">
+      <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#8a6a22;font-weight:700;margin-bottom:10px;">Meeting Details</div>
+      <p style="margin:5px 0;color:#1e2a3b;"><strong>Date:</strong> ${data.meetingDate || 'TBD'}</p>
+      <p style="margin:5px 0;color:#1e2a3b;"><strong>Time:</strong> ${data.meetingTime || 'TBD'}</p>
+      <p style="margin:5px 0;color:#1e2a3b;"><strong>Duration:</strong> ${data.duration || '30 mins'}</p>
+      <p style="margin:10px 0 0;color:#1e2a3b;"><strong>Meet Link:</strong> <a href="${meetLink || '#'}" style="color:#0d2b5f;">${meetLink || 'Not generated yet'}</a></p>
+    </div>
+  `
+
   return {
     subject: `New meeting request from ${data.name || 'website'}`,
     text: [
@@ -55,51 +65,73 @@ function formatMeetingEmail(data, meetLink) {
       data.message || 'N/A',
     ].join('\n'),
     html: `
-      <h2>New meeting request</h2>
-      <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
-      <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
-      <p><strong>Company:</strong> ${data.company || 'N/A'}</p>
-      <p><strong>Agenda:</strong> ${data.agenda || 'N/A'}</p>
-      <p><strong>Goals:</strong> ${data.goals || 'N/A'}</p>
-      <p><strong>Timeline:</strong> ${data.timeline || 'N/A'}</p>
-      <p><strong>Budget:</strong> ${data.budget || 'N/A'}</p>
-      <p><strong>Preferred Date:</strong> ${data.meetingDate || 'N/A'}</p>
-      <p><strong>Preferred Time:</strong> ${data.meetingTime || 'N/A'}</p>
-      <p><strong>Duration:</strong> ${data.duration || '30 mins'}</p>
-      <p><strong>Google Meet Link:</strong> <a href="${meetLink || '#'}">${meetLink || 'N/A'}</a></p>
-      <p><strong>Additional notes:</strong></p>
-      <p>${(data.message || 'N/A').replace(/\n/g, '<br />')}</p>
+      <div style="font-family:Arial,Helvetica,sans-serif;background:#f5f4f1;padding:30px 0;">
+        <div style="max-width:650px;margin:0 auto;background:#ffffff;border:1px solid #ece2c7;border-radius:18px;overflow:hidden;box-shadow:0 18px 55px rgba(12,28,52,0.08);">
+          <div style="background:linear-gradient(135deg,#0c2245,#1d4694);padding:26px 30px;color:#fff;">
+            <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#d7c18a;font-weight:700;">Collablit Solutions</div>
+            <h2 style="margin:10px 0 0;font-size:28px;line-height:1.3;">New Meeting Request</h2>
+          </div>
+          <div style="padding:28px 30px 10px; color:#1e2a3b;">
+            <p style="margin:0 0 12px;"><strong>Name:</strong> ${data.name || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Email:</strong> ${data.email || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Company:</strong> ${data.company || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Agenda:</strong> ${data.agenda || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Goals:</strong> ${data.goals || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Timeline:</strong> ${data.timeline || 'N/A'}</p>
+            <p style="margin:0 0 12px;"><strong>Budget:</strong> ${data.budget || 'N/A'}</p>
+            ${meetingSummary}
+            <p style="margin:18px 0 8px;"><strong>Additional notes:</strong></p>
+            <p style="margin:0;line-height:1.7;color:#33415a;">${(data.message || 'N/A').replace(/\n/g, '<br />')}</p>
+          </div>
+        </div>
+      </div>
     `,
   }
 }
 
 function formatUserMeetingEmail(data, meetLink) {
+  const bookingBlock = `
+    <div style="background:#f8f8f8;border:1px solid #e8e8e8;border-radius:14px;padding:18px 20px;margin:18px 0;">
+      <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#7a6b4a;font-weight:700;margin-bottom:10px;">Your Session</div>
+      <p style="margin:5px 0;color:#1f2b3a;"><strong>Date:</strong> ${data.meetingDate || 'To be confirmed'}</p>
+      <p style="margin:5px 0;color:#1f2b3a;"><strong>Time:</strong> ${data.meetingTime || 'To be confirmed'}</p>
+      <p style="margin:5px 0;color:#1f2b3a;"><strong>Duration:</strong> ${data.duration || '30 mins'}</p>
+      <p style="margin:10px 0 0;color:#1f2b3a;"><strong>Google Meet Link:</strong> <a href="${meetLink || '#'}" style="color:#0d2b5f;">${meetLink || 'Not available yet'}</a></p>
+    </div>
+  `
+
   return {
-    subject: 'Your Google Meet session is booked',
+    subject: 'Your strategy call is booked with Collablit Solutions',
     text: [
       `Hi ${data.name || 'there'},`,
       '',
-      'Thanks for booking a meeting with Collablit Solutions.',
+      'Thanks for booking a strategy call with Collablit Solutions.',
       `Date: ${data.meetingDate || 'To be confirmed'}`,
       `Time: ${data.meetingTime || 'To be confirmed'}`,
       `Duration: ${data.duration || '30 mins'}`,
       `Google Meet Link: ${meetLink || 'N/A'}`,
       '',
-      'Click the link to join the meeting.',
+      'Click the meeting link to join the call.',
       '',
-      'Regards,',
+      'See you soon,',
       'Collablit Solutions',
     ].join('\n'),
     html: `
-      <h2>Your Google Meet session is booked</h2>
-      <p>Hi ${data.name || 'there'},</p>
-      <p>Thanks for booking a meeting with Collablit Solutions.</p>
-      <p><strong>Date:</strong> ${data.meetingDate || 'To be confirmed'}</p>
-      <p><strong>Time:</strong> ${data.meetingTime || 'To be confirmed'}</p>
-      <p><strong>Duration:</strong> ${data.duration || '30 mins'}</p>
-      <p><strong>Google Meet Link:</strong> <a href="${meetLink || '#'}">${meetLink || 'N/A'}</a></p>
-      <p>Click the link above to join the meeting.</p>
-      <p>Regards,<br />Collablit Solutions</p>
+      <div style="font-family:Arial,Helvetica,sans-serif;background:#f3f1ed;padding:30px 0;">
+        <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e5ddd0;border-radius:18px;overflow:hidden;box-shadow:0 18px 55px rgba(12,28,52,0.08);">
+          <div style="background:linear-gradient(135deg,#0f223c,#1d4694);padding:26px 30px;color:#fff;">
+            <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e2c77d;font-weight:700;">Collablit Solutions</div>
+            <h2 style="margin:10px 0 0;font-size:28px;line-height:1.3;">Your Strategy Call Is Booked</h2>
+          </div>
+          <div style="padding:28px 30px; color:#1e2a3b;">
+            <p style="margin:0 0 12px;">Hi ${data.name || 'there'},</p>
+            <p style="margin:0 0 18px;line-height:1.7;">Thanks for booking a strategy call with us. We&apos;re looking forward to speaking with you.</p>
+            ${bookingBlock}
+            <p style="margin:18px 0 0;line-height:1.7;">Click the meeting link above to join your call. If anything changes, we&apos;ll reach out.</p>
+            <p style="margin:18px 0 0;">Warm regards,<br /><strong>Collablit Solutions</strong></p>
+          </div>
+        </div>
+      </div>
     `,
   }
 }
