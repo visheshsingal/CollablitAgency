@@ -21,7 +21,8 @@ const testimonials = [
     image:
       'https://media.licdn.com/dms/image/v2/D5603AQHL1rgMmsKxaA/profile-displayphoto-scale_200_200/B56ZkJZHmkHUAY-/0/1756799205299?e=2147483647&v=beta&t=dIJIiH7P42USBMrfmZejyivranV3_PTMjoJRo5KUvek',
   },
-  {
+  { 
+
     name: 'Tilak Raj Jain',
     role: 'Director',
     company: 'Vishesh Academy of Commerce',
