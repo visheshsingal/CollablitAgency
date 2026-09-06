@@ -61,7 +61,7 @@ export default function Footer() {
 
             <div className="link-group">
               <h4>Contact</h4>
-              <a href="mailto:vishesh.singal.contact@gmail.com">vishesh.singal.contact@gmail.com</a>
+              <a href="mailto:team@collablit.com">team@collablit.com</a>
               <a href="tel:+919024939664">+91 90249 39664</a>
               <Link href="/book-meeting">Book a meeting →</Link>
             </div>

@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-const toEmail = process.env.TO_EMAIL || 'vishesh.singal.contact@gmail.com'
+const toEmail = process.env.TO_EMAIL || 'team@collablit.com'
 
 function formatContactEmail(data) {
   return {

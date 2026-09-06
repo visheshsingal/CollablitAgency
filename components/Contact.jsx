@@ -70,9 +70,9 @@ export default function Contact() {
             </p>
 
             <div className="contact-details">
-              <a href="mailto:vishesh.singal.contact@gmail.com" className="detail-item">
+              <a href="mailto:team@collablit.com" className="detail-item">
                 <span className="detail-label">Email</span>
-                <span className="detail-value">vishesh.singal.contact@gmail.com</span>
+                <span className="detail-value">team@collablit.com</span>
               </a>
               <a href="tel:+919024939664" className="detail-item">
                 <span className="detail-label">Phone</span>
