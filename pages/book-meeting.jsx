@@ -226,13 +226,13 @@ export default function BookMeetingPage() {
         .page-shell {
           max-width: 1180px;
           margin: 0 auto;
-          padding: 80px 24px 120px;
+          padding: 18px 24px 72px;
         }
 
         .intro {
           text-align: center;
           max-width: 760px;
-          margin: 0 auto 42px;
+          margin: 0 auto 18px;
         }
 
         .eyebrow {
@@ -267,7 +267,7 @@ export default function BookMeetingPage() {
         .meeting-layout {
           display: grid;
           grid-template-columns: 0.9fr 1.1fr;
-          gap: 32px;
+          gap: 20px;
           align-items: start;
         }
 
@@ -279,7 +279,7 @@ export default function BookMeetingPage() {
         }
 
         .info-card {
-          padding: 28px 24px;
+          padding: 22px 20px;
         }
 
         .info-card h2 {
@@ -307,7 +307,7 @@ export default function BookMeetingPage() {
         }
 
         .form-wrap {
-          padding: 24px;
+          padding: 18px;
         }
 
         .meeting-form {

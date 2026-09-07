@@ -88,13 +88,13 @@ export default function TestimonialsPage() {
         .page-shell {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 80px 24px 120px;
+          padding: 52px 24px 96px;
         }
 
         .hero-block {
           text-align: center;
           max-width: 760px;
-          margin: 0 auto 52px;
+          margin: 0 auto 36px;
         }
 
         .eyebrow {
