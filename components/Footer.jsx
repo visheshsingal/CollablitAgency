@@ -10,25 +10,22 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link href="/" className="brand">
-              <span className="mark">
-                <span className="mark-letter">C</span>
-              </span>
-              <span className="brand-word">Collablit Solutions</span>
+            <Link href="/" className="brand logo-brand">
+              <img src="https://plain-apac-prod-public.komododecks.com/202609/07/8eX4Xx73q4wTa2vJrgyB/image.png" alt="Collablit Solutions logo" className="footer-logo" />
             </Link>
             <p className="brand-tagline">
               Development, design, and social media management for brands that
               want to grow on purpose, not by accident.
             </p>
             <div className="social-row">
-              <a href="#" aria-label="Instagram" className="social-link">
+              <a href="https://www.instagram.com/collablit_?stkn=aG9zMWl3eGs4cnBv" target="_blank" rel="noreferrer" aria-label="Instagram" className="social-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                   <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" strokeWidth="1.8" />
                   <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.8" />
                   <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
                 </svg>
               </a>
-              <a href="#" aria-label="LinkedIn" className="social-link">
+              <a href="https://www.linkedin.com/company/collablit/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="social-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                   <rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" strokeWidth="1.8" />
                   <path d="M7.5 10V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -36,9 +33,21 @@ export default function Footer() {
                   <path d="M11.5 17V13.2C11.5 11.5 12.5 10.5 14 10.5C15.5 10.5 16.3 11.5 16.3 13.2V17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </a>
-              <a href="#" aria-label="Twitter / X" className="social-link">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 3L21 21M21 3L3 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <a href="https://x.com/Collablit" target="_blank" rel="noreferrer" aria-label="X / Twitter" className="social-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 4L10.8 12.5L5.1 20H7.5L12.2 14.1L16.5 20H19.5L13.4 11.8L18.5 4H16.1L11.9 9.4L8 4H5Z" fill="currentColor" />
+                </svg>
+              </a>
+              <a href="https://www.youtube.com/@Collablit" target="_blank" rel="noreferrer" aria-label="YouTube" className="social-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M21.5 8.2C21.5 6.8 20.4 5.7 19 5.7C17.6 5.6 15.3 5.4 12 5.4C8.7 5.4 6.4 5.6 5 5.7C3.6 5.7 2.5 6.8 2.5 8.2V15.8C2.5 17.2 3.6 18.3 5 18.3C6.4 18.4 8.7 18.6 12 18.6C15.3 18.6 17.6 18.4 19 18.3C20.4 18.3 21.5 17.2 21.5 15.8V8.2Z" stroke="currentColor" strokeWidth="1.8" />
+                  <path d="M10 9.2L15.2 12L10 14.8V9.2Z" fill="currentColor" />
+                </svg>
+              </a>
+              <a href="https://t.me/collablit" target="_blank" rel="noreferrer" aria-label="Telegram" className="social-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 5L3.5 11.8C3 12 2.9 12.8 3.5 13L7.8 14.4L9.5 19.2C9.7 19.8 10.6 20 11 19.5L13.3 16.5L18.1 20.3C18.8 20.7 19.6 20.2 19.8 19.4L21 5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M9.5 14.3L20.4 5.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                 </svg>
               </a>
             </div>
@@ -130,44 +139,17 @@ export default function Footer() {
           margin-bottom: 20px;
         }
 
-        .mark {
-          position: relative;
-          width: 34px;
-          height: 34px;
-          flex-shrink: 0;
-          background: linear-gradient(155deg, #1d4694 0%, #0e2a5c 100%);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
+        .logo-brand {
+          margin-bottom: 18px;
         }
 
-        .mark::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 13px;
-          height: 13px;
-          background: linear-gradient(135deg, #e2c068, #c9a227);
-          clip-path: polygon(100% 0, 0 0, 100% 100%);
-        }
-
-        .mark-letter {
-          font-family: 'Fraunces', serif;
-          font-style: italic;
-          font-weight: 500;
-          font-size: 16px;
-          color: #f4d68a;
-        }
-
-        .brand-word {
-          font-family: 'Fraunces', serif;
-          font-weight: 600;
-          font-size: 20px;
-          letter-spacing: -0.02em;
-          color: #ffffff;
+        .footer-logo {
+          display: block;
+          height: 42px;
+          width: auto;
+          max-width: 240px;
+          object-fit: contain;
+          filter: brightness(0) invert(1);
         }
 
         .brand-tagline {

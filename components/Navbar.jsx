@@ -26,13 +26,12 @@ export default function Navbar() {
       <div className="nav-ribbon" aria-hidden="true" />
 
       <nav className="nav-inner" aria-label="Primary">
-        <Link href="/" className="brand">
-          <span className="mark">
-            <span className="mark-letter">C</span>
-          </span>
-          <span className="brand-text">
-            <span className="brand-word">Collablit Solutions</span>
-          </span>
+        <Link href="/" className="brand" aria-label="Collablit Solutions home">
+          <img
+            src="https://plain-apac-prod-public.komododecks.com/202609/07/8eX4Xx73q4wTa2vJrgyB/image.png"
+            alt="Collablit Solutions logo"
+            className="brand-logo"
+          />
         </Link>
 
         <ul className="nav-links">
@@ -97,13 +96,15 @@ export default function Navbar() {
           gap: 20px;
         }
 
-        .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
-
-        .mark { position: relative; width:34px; height:34px; border-radius:8px; background: linear-gradient(155deg,#0e2a5c,#0b1f42); display:flex;align-items:center;justify-content:center; overflow:hidden; }
-        .mark::after{ content:''; position:absolute; top:0; right:0; width:12px; height:12px; background:linear-gradient(135deg,#e2c068,#c9a227); clip-path:polygon(100% 0,0 0,100% 100%);} 
-        .mark-letter{ font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:16px; color:#f4d68a }
-
-        .brand-word { font-family:'Fraunces',serif; font-weight:600; font-size:18px; color:#0b234a }
+        .brand { display:inline-flex; align-items:center; text-decoration:none; }
+        .brand-logo {
+          display: block;
+          height: 52px;
+          width: auto;
+          max-width: 220px;
+          object-fit: contain;
+          filter: drop-shadow(0 5px 10px rgba(11, 35, 74, 0.08));
+        }
 
         .nav-links { display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0 }
 
