@@ -12,6 +12,7 @@ const developmentProjects = [
     tags: ['Corporate Website', 'Lead Generation', 'Trust-building UX'],
     url: 'https://www.policicue.com/',
     accent: 'Corporate trust',
+    image: 'https://plain-apac-prod-public.komododecks.com/202609/07/QhuKPZOOy8ozQNiWx5wl/image.png',
   },
   {
     name: 'FRD Nutrition',
@@ -21,6 +22,7 @@ const developmentProjects = [
     tags: ['E-commerce', 'Conversion UX', 'Premium Brand Design'],
     url: 'https://www.frdnutritionpremium.com/',
     accent: 'Performance brand',
+    image: 'https://plain-apac-prod-public.komododecks.com/202609/07/4vksYHbdlim6TlxxDqMs/image.png',
   },
   {
     name: 'Vishesh Academy of Commerce',
@@ -30,6 +32,7 @@ const developmentProjects = [
     tags: ['Education Brand', 'Landing Pages', 'Conversion-focused UX'],
     url: 'https://visheshacademy.com',
     accent: 'Academic authority',
+    image: 'https://plain-apac-prod-public.komododecks.com/202609/07/3PbkIJuyH6Ae0mR0x2cL/image.png',
   },
 ]
 
@@ -98,15 +101,7 @@ export default function ProjectsPage() {
                     <span />
                     <span />
                   </div>
-                  <div className="window-body">
-                    <div className="body-header">{project.name}</div>
-                    <div className="body-copy">
-                      <span className="copy-pill">{project.accent}</span>
-                      <span className="copy-line long" />
-                      <span className="copy-line" />
-                      <span className="copy-line" />
-                    </div>
-                  </div>
+                  <img src={project.image} alt={project.name} className="project-image" />
                 </div>
 
                 <div className="project-info">
@@ -285,15 +280,30 @@ export default function ProjectsPage() {
           overflow: hidden;
           border: 1px solid rgba(255,255,255,0.06);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+          position: relative;
+        }
+
+        .project-image {
+          display: block;
+          width: 100%;
+          height: 100%;
+          min-height: 260px;
+          object-fit: cover;
+          background: #eef2f8;
         }
 
         .window-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
           display: flex;
           align-items: center;
           gap: 8px;
           padding: 12px 14px;
-          background: rgba(255,255,255,0.04);
+          background: rgba(255,255,255,0.08);
           border-bottom: 1px solid rgba(255,255,255,0.06);
+          z-index: 1;
         }
 
         .window-bar span {
