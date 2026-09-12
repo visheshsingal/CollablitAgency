@@ -106,7 +106,7 @@ export default function TestimonialsPage() {
           color: #1d4694;
           background: rgba(29, 70, 148, 0.08);
           padding: 10px 14px;
-          border-radius: 10px;
+          border-radius: 999px;
           margin: 0 0 18px;
         }
 

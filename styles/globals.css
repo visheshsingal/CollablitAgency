@@ -1,19 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap');
+
 :root {
   --bg: #fff;
   --text: #0b1220;
   --accent: #0066ff;
   --muted: #6b7280;
+  --font-primary: 'Averia Serif Libre', Georgia, serif;
+  --font-secondary: 'Lucida Handwriting', 'Segoe Print', cursive;
 }
 
 * {
   box-sizing: border-box
 }
 
-body {
-  font-family: Inter, system-ui, Segoe UI, Arial;
+html, body {
+  font-family: var(--font-primary);
   margin: 0;
   color: var(--text);
   background: var(--bg)
+}
+
+h1, h2, h3, h4, h5, h6,
+strong,
+b,
+.article-title,
+.section-title,
+.hero-title,
+.service-title,
+.project-title,
+.faq-title,
+.card-title {
+  font-family: var(--font-primary);
+}
+
+.brand-script,
+.brand-signature,
+.script-text,
+.handwritten {
+  font-family: var(--font-secondary);
 }
 
 html {

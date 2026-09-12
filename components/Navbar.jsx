@@ -70,7 +70,7 @@ export default function Navbar() {
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap');
       `}</style>
 
       <style jsx>{`
@@ -96,6 +96,10 @@ export default function Navbar() {
           align-items: center;
           justify-content: space-between;
           gap: 20px;
+          border-radius: 9999px;
+          background: transparent;
+          border: 0;
+          box-shadow: none;
         }
 
         .brand { display:inline-flex; align-items:center; text-decoration:none; }
@@ -110,7 +114,7 @@ export default function Navbar() {
 
         .nav-links { display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0 }
 
-        .nav-link { position:relative; display:inline-flex; align-items:center; gap:6px; font-family:Inter, sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#35405a; padding:6px 0; transition:color 0.22s ease; text-decoration:none; }
+        .nav-link { position:relative; display:inline-flex; align-items:center; gap:6px; font-family:'Averia Serif Libre', Georgia, serif; font-size:12px; font-weight:600; letter-spacing:0.06em; color:#35405a; padding:6px 0; transition:color 0.22s ease; text-decoration:none; }
         .nav-link-dot{ width:3px; height:3px; border-radius:50%; background:#c9a227; opacity:0; transform:scale(0); transition:all 0.28s cubic-bezier(.34,1.56,.64,1) }
         .nav-link:hover{ color:#0b234a }
         .nav-link:hover .nav-link-dot{ opacity:1; transform:scale(1) }
@@ -121,12 +125,16 @@ export default function Navbar() {
         .mobile-panel { max-height:0; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,252,0.98)); transition:max-height 0.36s ease; border-bottom:1px solid rgba(11,35,74,0.04) }
         .mobile-panel--open { max-height:420px }
         .mobile-panel ul{ list-style:none; margin:0; padding:8px 20px 4px; display:flex; flex-direction:column; gap:6px }
-        .mobile-panel a{ display:block; padding:12px 0; font-family:Inter, sans-serif; font-size:15px; font-weight:600; color:#0b234a; text-decoration:none; border-bottom:1px solid rgba(11,35,74,0.03) }
+        .mobile-panel a{ display:block; padding:12px 0; font-family:'Averia Serif Libre', Georgia, serif; font-size:15px; font-weight:600; color:#0b234a; text-decoration:none; border-bottom:1px solid rgba(11,35,74,0.03) }
 
         @media (max-width: 900px) {
           .nav-links { display:none }
           .burger { display:flex }
-          .nav-inner { padding:12px 14px }
+          .nav-inner {
+            padding: 12px 14px;
+            margin: 0 14px;
+            width: calc(100% - 28px);
+          }
         }
       `}</style>
     </header>
