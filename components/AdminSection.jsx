@@ -1,23 +1,38 @@
 import { useEffect, useState } from 'react'
+import AdminLayout from './AdminLayout.jsx'
+import BrandLogo from './BrandLogo.jsx'
 
 export default function AdminSection({ section }) {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const load = async () => {
-    const response = await fetch('/api/admin-data')
-    if (response.ok) setData(await response.json())
-    else setData(false)
+    setLoading(true)
+    try {
+      const response = await fetch('/api/admin-data')
+      if (response.ok) setData(await response.json())
+      else setData(false)
+    } catch {
+      setData(false)
+    }
+    setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    load()
+  }, [])
 
   const login = async (event) => {
     event.preventDefault()
     setError('')
-    const response = await fetch('/api/admin-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(credentials) })
+    const response = await fetch('/api/admin-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
     if (!response.ok) {
       setError('Invalid username or password.')
       return
@@ -25,14 +40,488 @@ export default function AdminSection({ section }) {
     load()
   }
 
-  if (data === null) return <div className="section-state">Loading workspace...</div>
-  if (data === false) return <main className="section-login"><form onSubmit={login}><p className="eyebrow">Admin access</p><h1>{section === 'leads' ? 'Lead desk' : 'Finance desk'}</h1><input placeholder="Username" value={credentials.username} onChange={(event) => setCredentials({ ...credentials, username: event.target.value })} required /><div className="password-field"><input type={showPassword ? 'text' : 'password'} placeholder="Password" value={credentials.password} onChange={(event) => setCredentials({ ...credentials, password: event.target.value })} required /><button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Hide' : 'Show'}</button></div>{error && <p className="error">{error}</p>}<button className="submit">Open section</button></form><style jsx>{styles}</style></main>
+  const logout = async () => {
+    await fetch('/api/admin-auth', { method: 'DELETE' })
+    setData(false)
+  }
+
+  if (data === null) {
+    return (
+      <div className="loading-container">
+        <div className="spinner" />
+        <p>Connecting to operational database...</p>
+        <style jsx>{`
+          .loading-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: #f4f6fa;
+            color: #64748b;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          }
+          .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #cbd5e1;
+            border-top-color: #0d253f;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    )
+  }
+
+  if (data === false) {
+    return (
+      <main className="section-login-wrap">
+        <div className="login-card">
+          <div className="brand-wrap">
+            <BrandLogo />
+          </div>
+          <div className="login-header">
+            <span className="tag">SECURITY CHECK</span>
+            <h1>{section === 'leads' ? 'Leads Access' : 'Finance Desk'}</h1>
+            <p>Enter administrator credentials to proceed.</p>
+          </div>
+          <form onSubmit={login}>
+            <div className="field">
+              <label>Username</label>
+              <input
+                placeholder="Username"
+                value={credentials.username}
+                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                required
+              />
+            </div>
+            <div className="field">
+              <label>Password</label>
+              <div className="password-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={credentials.password}
+                  onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                  required
+                />
+                <button
+                  type="button"
+                  className="toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+            {error && <p className="error-alert">{error}</p>}
+            <button type="submit" className="login-submit">Unlock Desk</button>
+          </form>
+        </div>
+        <style jsx>{loginStyles}</style>
+      </main>
+    )
+  }
 
   const rows = section === 'leads' ? data.bookings : data.finance
-  return <main className="section-page"><header><div><p className="eyebrow">Collablit Operations / {section}</p><h1>{section === 'leads' ? 'Lead desk' : 'Finance desk'}</h1><p className="subhead">{section === 'leads' ? 'Every meeting request, ready to qualify.' : 'Track income, expenses, and the current balance.'}</p></div><a href="/admin">Overview →</a></header><section className="summary"><strong>{section === 'leads' ? data.bookings.length : data.finance.length}</strong><span>{section === 'leads' ? 'meeting requests' : 'transactions recorded'}</span></section><section className="table-panel"><table><thead><tr>{section === 'leads' ? <><th>Client</th><th>Company</th><th>Meeting</th><th>Budget</th><th>Status</th></> : <><th>Client / payee</th><th>Category</th><th>Date</th><th>Amount</th><th>Type</th></>}</tr></thead><tbody>{rows.map((row) => section === 'leads' ? <tr key={row._id}><td><strong>{row.name}</strong><small>{row.email}</small></td><td>{row.company || '—'}</td><td>{row.meetingDate || 'TBD'}<small>{row.meetingTime || ''}</small></td><td>{row.budget || '—'}</td><td><span>{row.status || 'new'}</span></td></tr> : <tr key={row._id}><td>{row.client}</td><td>{row.category}</td><td>{row.date}</td><td className={row.type === 'income' ? 'income' : 'expense'}>{row.type === 'income' ? '+' : '-'}₹{Number(row.amount).toLocaleString('en-IN')}</td><td>{row.type}</td></tr>)}</tbody></table>{!rows.length && <p className="empty">Nothing recorded yet.</p>}</section><style jsx>{styles}</style></main>
+  const pageTitle = section === 'leads' ? 'Leads & Enquiries' : 'Finance & Ledger'
+  const isLeads = section === 'leads'
+
+  return (
+    <AdminLayout
+      title={pageTitle}
+      kicker="Specialized Desk"
+      onRefresh={load}
+      onLogout={logout}
+      loading={loading}
+    >
+      <div className="desk-container">
+        {/* Top Summary Banner */}
+        <div className="desk-banner">
+          <div>
+            <h2>{isLeads ? 'Client Meeting & Inquiries Desk' : 'Financial Ledger & Cashflow'}</h2>
+            <p>
+              {isLeads
+                ? 'All incoming leads from prospective clients across the website.'
+                : 'Direct ledger view of incoming client payments and operational expenses.'}
+            </p>
+          </div>
+          <div className="metric-pill">
+            <span className="metric-number">{rows.length}</span>
+            <span className="metric-desc">{isLeads ? 'Total Requests' : 'Total Entries'}</span>
+          </div>
+        </div>
+
+        {/* Data Table */}
+        <div className="desk-panel">
+          <div className="table-responsive">
+            <table className="desk-table">
+              <thead>
+                <tr>
+                  {isLeads ? (
+                    <>
+                      <th>Client Name</th>
+                      <th>Company</th>
+                      <th>Meeting Slot</th>
+                      <th>Budget</th>
+                      <th>Status</th>
+                    </>
+                  ) : (
+                    <>
+                      <th>Client / Payee</th>
+                      <th>Category</th>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Type</th>
+                    </>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) =>
+                  isLeads ? (
+                    <tr key={row._id}>
+                      <td>
+                        <strong className="lead-name">{row.name}</strong>
+                        <span className="lead-email">{row.email}</span>
+                      </td>
+                      <td>{row.company || '—'}</td>
+                      <td>
+                        <strong>{row.meetingDate || 'TBD'}</strong>
+                        <span className="lead-time">{row.meetingTime || ''}</span>
+                      </td>
+                      <td>
+                        <span className="budget-chip">{row.budget || '—'}</span>
+                      </td>
+                      <td>
+                        <span className="status-pill">{row.status || 'new'}</span>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr key={row._id}>
+                      <td>
+                        <strong className="lead-name">{row.client}</strong>
+                        {row.note && <span className="lead-email">{row.note}</span>}
+                      </td>
+                      <td>{row.category || 'General'}</td>
+                      <td>{row.date}</td>
+                      <td className={row.type === 'income' ? 'val-positive' : 'val-negative'}>
+                        {row.type === 'income' ? '+' : '-'}₹{Number(row.amount).toLocaleString('en-IN')}
+                      </td>
+                      <td>
+                        <span className={`type-tag ${row.type}`}>
+                          {row.type}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+
+            {!rows.length && (
+              <div className="empty-state">
+                <p>No records found for this section yet.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{styles}</style>
+    </AdminLayout>
+  )
 }
 
+const loginStyles = `
+  .section-login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f4f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .login-card {
+    width: min(420px, 100%);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 38px 32px;
+    box-shadow: 0 16px 36px rgba(13, 37, 63, 0.08);
+    border: 1px solid #e2e8f0;
+  }
+  .brand-wrap :global(.brand-logo) {
+    display: block;
+    width: 150px;
+    height: 40px;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .login-header {
+    margin: 20px 0 22px;
+  }
+  .tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #ad702c;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .login-header h1 {
+    margin: 4px 0 6px;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0d253f;
+  }
+  .login-header p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: #64748b;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+  }
+  .field input {
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    outline: none;
+  }
+  .password-wrap {
+    position: relative;
+    display: flex;
+  }
+  .password-wrap input {
+    width: 100%;
+    padding-right: 60px;
+  }
+  .toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: #64748b;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .error-alert {
+    margin: 0;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+  }
+  .login-submit {
+    margin-top: 6px;
+    background: #0d253f;
+    color: #fff;
+    border: 0;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .login-submit:hover {
+    background: #173b5e;
+  }
+`
+
 const styles = `
-  .section-page { max-width: 1120px; margin: 0 auto; padding: 48px 5vw 70px 260px; color:#173b5e; }.section-page header { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:28px; }.section-page header a { color:#a16d2b; font-weight:700; text-decoration:none; }.eyebrow { color:#ad702c; font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; margin:0 0 9px; }.section-page h1, .section-login h1 { font:400 clamp(2.4rem,4vw,4.2rem) Georgia,serif; margin:0; }.subhead { color:#71808b; }.summary { display:grid; gap:6px; width:180px; padding:20px; margin-bottom:14px; background:#173b5e; color:#fff; border-radius:7px; }.summary strong { font:400 2rem Georgia,serif; }.summary span { color:rgba(255,255,255,.7); font-size:.8rem; }.table-panel { background:rgba(255,255,255,.76); border:1px solid rgba(23,59,94,.1); border-radius:8px; padding:22px; overflow:auto; }table { width:100%; min-width:680px; border-collapse:collapse; text-align:left; }th { color:#87918e; font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; padding:0 12px 12px; }td { border-top:1px solid #ecece7; padding:14px 12px; color:#53636e; font-size:.88rem; }td strong, td small { display:block; }td strong { color:#173b5e; }td small { margin-top:4px; color:#87918e; }td span { color:#21835d; background:#e3f3eb; padding:5px 9px; border-radius:20px; font-size:.75rem; }.income { color:#21835d; font-weight:700; }.expense { color:#b65f4d; font-weight:700; }.empty, .section-state { color:#87918e; }.section-state { padding:80px; text-align:center; }.section-login { min-height:100vh; display:grid; place-items:center; padding:24px; background:#f4f0e9; }.section-login form { width:min(400px,100%); display:grid; gap:13px; padding:36px; background:#fff; border-radius:8px; }.section-login input { width:100%; padding:12px; border:1px solid #dfe0dc; border-radius:4px; font:inherit; }.password-field { display:flex; border:1px solid #dfe0dc; border-radius:4px; overflow:hidden; }.password-field input { border:0; }.password-field button { border:0; padding:0 12px; background:#f4f0e9; color:#173b5e; }.submit { border:0; border-radius:4px; padding:13px; background:#173b5e; color:#fff; font-weight:700; }.error { color:#b65f4d; }
-  @media (max-width:1100px) { .section-page { padding:34px 16px 60px; } }.@media (max-width:600px) { .section-page header { display:block; }.section-page header a { display:inline-block; margin-top:15px; } }
+  .desk-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .desk-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 22px 26px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .desk-banner h2 {
+    margin: 0 0 6px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0d253f;
+  }
+
+  .desk-banner p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #64748b;
+  }
+
+  .metric-pill {
+    background: #0d253f;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+  }
+
+  .metric-number {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #d39b45;
+    line-height: 1;
+  }
+
+  .metric-desc {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  .desk-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .desk-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 720px;
+  }
+
+  .desk-table th {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+    padding: 10px 14px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .desk-table td {
+    padding: 14px;
+    font-size: 0.88rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .lead-name {
+    display: block;
+    color: #0d253f;
+    font-size: 0.9rem;
+  }
+
+  .lead-email, .lead-time {
+    display: block;
+    font-size: 0.76rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  .budget-chip {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #ecfdf5;
+    color: #047857;
+  }
+
+  .val-positive {
+    color: #16a34a;
+    font-weight: 700;
+  }
+
+  .val-negative {
+    color: #dc2626;
+    font-weight: 700;
+  }
+
+  .type-tag {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .type-tag.income {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .type-tag.expense {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .empty-state {
+    padding: 40px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 640px) {
+    .desk-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .metric-pill {
+      width: 100%;
+    }
+  }
 `

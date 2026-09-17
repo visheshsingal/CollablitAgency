@@ -1,61 +1,71 @@
 import { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
-import AdminClients from '../components/AdminClients.jsx'
+import AdminLayout from '../components/AdminLayout.jsx'
 import BrandLogo from '../components/BrandLogo.jsx'
 
-const money = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(value) || 0)
-const dateLabel = (value) => value ? new Date(value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+const money = (value) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0)
+
+const dateLabel = (value) =>
+  value
+    ? new Date(value).toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      })
+    : '—'
 
 export default function AdminPage() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
   const [loginError, setLoginError] = useState('')
   const [data, setData] = useState({ bookings: [], finance: [], clients: [] })
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState('')
   const [bookingStatus, setBookingStatus] = useState('all')
-  const [financeForm, setFinanceForm] = useState({ type: 'income', client: '', category: '', amount: '', date: new Date().toISOString().slice(0, 10), note: '' })
+  const [financeForm, setFinanceForm] = useState({
+    type: 'income',
+    client: '',
+    category: '',
+    amount: '',
+    date: new Date().toISOString().slice(0, 10),
+    note: '',
+  })
   const [financeError, setFinanceError] = useState('')
 
   const loadData = async () => {
     setLoading(true)
-    const response = await fetch('/api/admin-data')
-    if (response.ok) {
-      setData(await response.json())
-      setLoggedIn(true)
-    } else {
+    try {
+      const response = await fetch('/api/admin-data')
+      if (response.ok) {
+        setData(await response.json())
+        setLoggedIn(true)
+      } else {
+        setLoggedIn(false)
+      }
+    } catch {
       setLoggedIn(false)
     }
     setLoading(false)
   }
 
-  useEffect(() => { loadData() }, [])
-
   useEffect(() => {
-    if (loggedIn || typeof document === 'undefined') return undefined
-    const input = document.querySelector('.admin-login input[type="password"]')
-    if (!input || input.parentElement.querySelector('.password-toggle')) return undefined
-    const wrapper = document.createElement('div')
-    wrapper.className = 'password-toggle-wrap'
-    input.parentElement.insertBefore(wrapper, input)
-    wrapper.appendChild(input)
-    const toggle = document.createElement('button')
-    toggle.type = 'button'
-    toggle.className = 'password-toggle'
-    toggle.textContent = 'Show'
-    toggle.addEventListener('click', () => {
-      const visible = input.type === 'text'
-      input.type = visible ? 'password' : 'text'
-      toggle.textContent = visible ? 'Show' : 'Hide'
-    })
-    wrapper.appendChild(toggle)
-    return () => toggle.remove()
-  }, [loggedIn])
+    loadData()
+  }, [])
 
   const login = async (event) => {
     event.preventDefault()
     setLoginError('')
-    const response = await fetch('/api/admin-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(credentials) })
+    const response = await fetch('/api/admin-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
     if (!response.ok) {
       setLoginError('Invalid username or password.')
       return
@@ -69,21 +79,32 @@ export default function AdminPage() {
     setData({ bookings: [], finance: [], clients: [] })
   }
 
-  const filteredBookings = useMemo(() => data.bookings.filter((booking) => {
-    const searchable = `${booking.name} ${booking.email} ${booking.company} ${booking.agenda}`.toLowerCase()
-    return searchable.includes(query.toLowerCase()) && (bookingStatus === 'all' || (booking.status || 'new') === bookingStatus)
-  }), [data.bookings, query, bookingStatus])
+  const filteredBookings = useMemo(() => {
+    return data.bookings.filter((booking) => {
+      const searchable = `${booking.name} ${booking.email} ${booking.company} ${booking.agenda}`.toLowerCase()
+      return (
+        searchable.includes(query.toLowerCase()) &&
+        (bookingStatus === 'all' || (booking.status || 'new') === bookingStatus)
+      )
+    })
+  }, [data.bookings, query, bookingStatus])
 
   const stats = useMemo(() => {
-    const income = data.finance.filter((item) => item.type === 'income').reduce((sum, item) => sum + Number(item.amount), 0)
-    const expense = data.finance.filter((item) => item.type === 'expense').reduce((sum, item) => sum + Number(item.amount), 0)
+    const income = data.finance
+      .filter((item) => item.type === 'income')
+      .reduce((sum, item) => sum + Number(item.amount), 0)
+    const expense = data.finance
+      .filter((item) => item.type === 'expense')
+      .reduce((sum, item) => sum + Number(item.amount), 0)
     return { income, expense, profit: income - expense }
   }, [data.finance])
 
   const monthlyBookings = useMemo(() => {
     const buckets = {}
     data.bookings.forEach((booking) => {
-      const key = new Date(booking.createdAt).toLocaleDateString('en-IN', { month: 'short' })
+      const key = new Date(booking.createdAt).toLocaleDateString('en-IN', {
+        month: 'short',
+      })
       buckets[key] = (buckets[key] || 0) + 1
     })
     return Object.entries(buckets).slice(-6)
@@ -92,54 +113,1310 @@ export default function AdminPage() {
   const addTransaction = async (event) => {
     event.preventDefault()
     setFinanceError('')
-    const response = await fetch('/api/admin-data', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(financeForm) })
+    const response = await fetch('/api/admin-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(financeForm),
+    })
     const result = await response.json()
     if (!response.ok) {
       setFinanceError(result.message || 'Could not save transaction.')
       return
     }
-    setData((current) => ({ ...current, finance: [result.transaction, ...current.finance] }))
-    setFinanceForm((current) => ({ ...current, client: '', amount: '', note: '' }))
+    setData((current) => ({
+      ...current,
+      finance: [result.transaction, ...current.finance],
+    }))
+    setFinanceForm((current) => ({
+      ...current,
+      client: '',
+      amount: '',
+      note: '',
+    }))
   }
 
   const deleteTransaction = async (id) => {
     await fetch(`/api/admin-data?id=${id}`, { method: 'DELETE' })
-    setData((current) => ({ ...current, finance: current.finance.filter((item) => item._id !== id) }))
+    setData((current) => ({
+      ...current,
+      finance: current.finance.filter((item) => item._id !== id),
+    }))
   }
 
   if (!loggedIn) {
-     return <><Head><title>Admin Login | Collablit Solutions</title></Head><main className="admin-login"><div className="login-panel"><BrandLogo /><p className="kicker">Collablit Solutions</p><h1>Command centre</h1><p className="login-copy">Private access for your agency operations.</p><form onSubmit={login}><label>Username<input value={credentials.username} onChange={(event) => setCredentials({ ...credentials, username: event.target.value })} autoComplete="username" required /></label><label>Password<input type="password" value={credentials.password} onChange={(event) => setCredentials({ ...credentials, password: event.target.value })} autoComplete="current-password" required /></label>{loginError && <p className="form-error">{loginError}</p>}<button className="primary-button">Enter dashboard</button></form></div></main><style jsx>{styles}</style></>
+    return (
+      <>
+        <Head>
+          <title>Admin Login | Collablit Solutions</title>
+        </Head>
+        <main className="admin-login-screen">
+          <div className="login-card">
+            <div className="brand-wrap">
+              <BrandLogo />
+            </div>
+            <div className="login-header">
+              <span className="login-tag">AGENCY CONSOLE</span>
+              <h1>Operations Access</h1>
+              <p>Secure command centre for leads, cashflow, and portals.</p>
+            </div>
+            <form onSubmit={login} className="login-form">
+              <div className="field">
+                <label>Username</label>
+                <input
+                  value={credentials.username}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, username: e.target.value })
+                  }
+                  placeholder="Enter administrator username"
+                  autoComplete="username"
+                  required
+                />
+              </div>
+              <div className="field">
+                <label>Password</label>
+                <div className="password-input-wrap">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={credentials.password}
+                    onChange={(e) =>
+                      setCredentials({ ...credentials, password: e.target.value })
+                    }
+                    placeholder="Enter security key"
+                    autoComplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="toggle-pass-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+              </div>
+
+              {loginError && <p className="error-alert">{loginError}</p>}
+
+              <button type="submit" className="login-btn">
+                Enter Dashboard
+              </button>
+            </form>
+          </div>
+          <style jsx>{loginStyles}</style>
+        </main>
+      </>
+    )
   }
 
-  return <><Head><title>Admin Dashboard | Collablit Solutions</title></Head><main className="admin-page"><header className="admin-header"><div><p className="kicker">Collablit Solutions / Operations</p><h1>Good morning, team.</h1><p className="subhead">A live view of enquiries, cash flow, and client momentum.</p></div><div className="header-actions"><button className="refresh-button" onClick={loadData}>{loading ? 'Refreshing...' : 'Refresh data'}</button><button className="logout-button" onClick={logout}>Sign out</button></div></header><section className="stat-grid"><div className="stat-card"><span>New enquiries</span><strong>{data.bookings.length}</strong><small>All meeting requests</small></div><div className="stat-card"><span>Total received</span><strong>{money(stats.income)}</strong><small className="positive">Client income</small></div><div className="stat-card"><span>Total spent</span><strong>{money(stats.expense)}</strong><small className="negative">Tracked expenses</small></div><div className="stat-card highlight"><span>Net position</span><strong>{money(stats.profit)}</strong><small>Income minus expenses</small></div></section><section className="chart-grid"><div className="panel"><div className="panel-heading"><div><p className="kicker">Pipeline</p><h2>Bookings by month</h2></div><span className="panel-note">{data.bookings.length} total</span></div><div className="bar-chart">{monthlyBookings.length ? monthlyBookings.map(([month, count]) => <div className="bar-item" key={month}><div className="bar-value">{count}</div><div className="bar" style={{ height: `${Math.max(18, count / Math.max(...monthlyBookings.map(([, value]) => value)) * 150)}px` }} /><small>{month}</small></div>) : <p className="empty-state">Bookings will appear here as soon as the first request arrives.</p>}</div></div><div className="panel"><div className="panel-heading"><div><p className="kicker">Cash flow</p><h2>Income vs spending</h2></div></div><div className="donut-wrap"><div className="donut" style={{ background: `conic-gradient(#d39b45 0deg ${stats.income + stats.expense ? stats.income / (stats.income + stats.expense) * 360 : 0}deg, #173b5e 0deg)` }}><div><strong>{money(stats.income - stats.expense)}</strong><small>net balance</small></div></div><div className="legend"><span><i className="income-dot" />Income <b>{money(stats.income)}</b></span><span><i className="expense-dot" />Expenses <b>{money(stats.expense)}</b></span></div></div></div></section><section className="panel bookings-panel"><div className="panel-heading"><div><p className="kicker">Client pipeline</p><h2>Meeting requests</h2></div><div className="filters"><input placeholder="Search client or email" value={query} onChange={(event) => setQuery(event.target.value)} /><select value={bookingStatus} onChange={(event) => setBookingStatus(event.target.value)}><option value="all">All statuses</option><option value="new">New</option></select></div></div><div className="table-wrap"><table><thead><tr><th>Client</th><th>Company</th><th>Preferred slot</th><th>Budget</th><th>Received</th><th>Status</th></tr></thead><tbody>{filteredBookings.map((booking) => <tr key={booking._id}><td><strong>{booking.name}</strong><small>{booking.email}</small></td><td>{booking.company || '—'}</td><td>{booking.meetingDate || '—'}<small>{booking.meetingTime || ''}</small></td><td>{booking.budget || '—'}</td><td>{dateLabel(booking.createdAt)}</td><td><span className="status-pill">{booking.status || 'new'}</span></td></tr>)}</tbody></table>{!filteredBookings.length && <p className="empty-state">No requests match these filters.</p>}</div></section><section className="finance-layout"><div className="panel"><div className="panel-heading"><div><p className="kicker">Ledger</p><h2>Recent transactions</h2></div></div><div className="transaction-list">{data.finance.map((item) => <div className="transaction" key={item._id}><div><strong>{item.client}</strong><small>{item.category} · {dateLabel(item.date)}</small></div><strong className={item.type === 'income' ? 'positive' : 'negative'}>{item.type === 'income' ? '+' : '-'}{money(item.amount)}</strong><button className="delete-button" aria-label="Delete transaction" onClick={() => deleteTransaction(item._id)}>×</button></div>)}{!data.finance.length && <p className="empty-state">Add your first income or expense to start tracking.</p>}</div></div><div className="panel add-panel"><div className="panel-heading"><div><p className="kicker">Update ledger</p><h2>Add transaction</h2></div></div><form className="finance-form" onSubmit={addTransaction}><div className="segmented"><button type="button" className={financeForm.type === 'income' ? 'selected' : ''} onClick={() => setFinanceForm({ ...financeForm, type: 'income' })}>Income</button><button type="button" className={financeForm.type === 'expense' ? 'selected expense-selected' : ''} onClick={() => setFinanceForm({ ...financeForm, type: 'expense' })}>Expense</button></div><input placeholder="Client or payee" value={financeForm.client} onChange={(event) => setFinanceForm({ ...financeForm, client: event.target.value })} required /><div className="input-row"><input type="number" min="1" placeholder="Amount (INR)" value={financeForm.amount} onChange={(event) => setFinanceForm({ ...financeForm, amount: event.target.value })} required /><input type="date" value={financeForm.date} onChange={(event) => setFinanceForm({ ...financeForm, date: event.target.value })} required /></div><input placeholder="Category (e.g. Website project)" value={financeForm.category} onChange={(event) => setFinanceForm({ ...financeForm, category: event.target.value })} /><input placeholder="Note (optional)" value={financeForm.note} onChange={(event) => setFinanceForm({ ...financeForm, note: event.target.value })} />{financeError && <p className="form-error">{financeError}</p>}<button className="primary-button">Save transaction</button></form></div></section></main><style jsx>{styles}</style></>
+  return (
+    <>
+      <Head>
+        <title>Admin Overview | Collablit Solutions</title>
+      </Head>
+      <AdminLayout
+        title="Overview & Pulse"
+        kicker="Collablit Command"
+        onRefresh={loadData}
+        onLogout={logout}
+        loading={loading}
+      >
+        <div className="dashboard-container">
+          {/* Welcome Intro Header */}
+          <div className="welcome-banner">
+            <div>
+              <h2>Welcome to Agency Operations</h2>
+              <p>Real-time telemetry across pipeline enquiries, income ledger, and client progress.</p>
+            </div>
+            <div className="banner-stats">
+              <div className="banner-stat-item">
+                <span className="stat-label">Active Portals</span>
+                <span className="stat-num">{data.clients?.length || 0}</span>
+              </div>
+              <div className="banner-stat-divider" />
+              <div className="banner-stat-item">
+                <span className="stat-label">Total Leads</span>
+                <span className="stat-num">{data.bookings.length}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Metrics Cards */}
+          <section className="stat-grid">
+            <div className="stat-card">
+              <div className="card-top">
+                <span className="card-kicker">INQUIRIES</span>
+                <span className="card-icon-tag bg-blue">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                  </svg>
+                </span>
+              </div>
+              <strong className="metric-val">{data.bookings.length}</strong>
+              <div className="metric-footer">
+                <span className="footer-sub">All meeting bookings</span>
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <div className="card-top">
+                <span className="card-kicker">RECEIVED REVENUE</span>
+                <span className="card-icon-tag bg-green">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                  </svg>
+                </span>
+              </div>
+              <strong className="metric-val text-green">{money(stats.income)}</strong>
+              <div className="metric-footer">
+                <span className="badge-pill positive-pill">+ Inflow</span>
+                <span className="footer-sub">Client payments</span>
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <div className="card-top">
+                <span className="card-kicker">EXPENDITURES</span>
+                <span className="card-icon-tag bg-red">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </span>
+              </div>
+              <strong className="metric-val text-red">{money(stats.expense)}</strong>
+              <div className="metric-footer">
+                <span className="badge-pill negative-pill">- Outflow</span>
+                <span className="footer-sub">Operational costs</span>
+              </div>
+            </div>
+
+            <div className="stat-card highlight-card">
+              <div className="card-top">
+                <span className="card-kicker">NET SURPLUS</span>
+                <span className="card-icon-tag bg-gold">₹</span>
+              </div>
+              <strong className="metric-val highlight-val">{money(stats.profit)}</strong>
+              <div className="metric-footer">
+                <span className="footer-sub highlight-sub">Net after expenses</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Charts Row */}
+          <section className="chart-grid">
+            {/* Bookings Monthly Bar Chart */}
+            <div className="panel chart-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">TRACTION TREND</span>
+                  <h3>Bookings by Month</h3>
+                </div>
+                <span className="count-pill">{data.bookings.length} Total</span>
+              </div>
+              <div className="bar-chart-container">
+                {monthlyBookings.length ? (
+                  <div className="bar-chart">
+                    {monthlyBookings.map(([month, count]) => {
+                      const maxVal = Math.max(...monthlyBookings.map(([, v]) => v)) || 1
+                      const heightPx = Math.max(22, (count / maxVal) * 130)
+                      return (
+                        <div className="bar-col" key={month}>
+                          <span className="bar-tooltip">{count}</span>
+                          <div className="bar-fill" style={{ height: `${heightPx}px` }} />
+                          <small className="bar-label">{month}</small>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="chart-empty">
+                    <p>No meeting requests recorded yet.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Income vs Expenses Donut Chart */}
+            <div className="panel chart-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">FINANCIAL BREAKDOWN</span>
+                  <h3>Income vs Expenses</h3>
+                </div>
+              </div>
+              <div className="donut-wrap">
+                <div
+                  className="donut-circle"
+                  style={{
+                    background: `conic-gradient(#d39b45 0deg ${
+                      stats.income + stats.expense
+                        ? (stats.income / (stats.income + stats.expense)) * 360
+                        : 0
+                    }deg, #0d253f 0deg)`,
+                  }}
+                >
+                  <div className="donut-inner">
+                    <strong>{money(stats.income - stats.expense)}</strong>
+                    <small>Net Position</small>
+                  </div>
+                </div>
+                <div className="donut-legend">
+                  <div className="legend-row">
+                    <span className="legend-dot dot-income" />
+                    <span className="legend-name">Income</span>
+                    <strong>{money(stats.income)}</strong>
+                  </div>
+                  <div className="legend-row">
+                    <span className="legend-dot dot-expense" />
+                    <span className="legend-name">Expense</span>
+                    <strong>{money(stats.expense)}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Bookings / Enquiries Table */}
+          <section className="panel table-panel">
+            <div className="panel-header table-header">
+              <div>
+                <span className="panel-kicker">INCOMING INQUIRIES</span>
+                <h3>Client Meeting Requests</h3>
+              </div>
+              <div className="filter-controls">
+                <div className="search-box">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search name, company, email..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                </div>
+                <select
+                  value={bookingStatus}
+                  onChange={(e) => setBookingStatus(e.target.value)}
+                  className="select-status"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="new">New</option>
+                  <option value="confirmed">Confirmed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="table-responsive">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Company</th>
+                    <th>Preferred Slot</th>
+                    <th>Budget</th>
+                    <th>Received On</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredBookings.map((b) => (
+                    <tr key={b._id}>
+                      <td>
+                        <strong className="client-cell-name">{b.name}</strong>
+                        <span className="cell-sub">{b.email}</span>
+                      </td>
+                      <td>{b.company || '—'}</td>
+                      <td>
+                        <strong>{b.meetingDate || '—'}</strong>
+                        <span className="cell-sub">{b.meetingTime || ''}</span>
+                      </td>
+                      <td>
+                        <span className="budget-tag">{b.budget || '—'}</span>
+                      </td>
+                      <td>{dateLabel(b.createdAt)}</td>
+                      <td>
+                        <span className="status-pill">{b.status || 'new'}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {!filteredBookings.length && (
+                <div className="empty-message">
+                  <p>No meeting requests match the filter criteria.</p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Ledger Section */}
+          <section className="finance-grid">
+            {/* Recent Transactions List */}
+            <div className="panel ledger-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">FINANCIAL LEDGER</span>
+                  <h3>Recent Transactions</h3>
+                </div>
+                <span className="count-pill">{data.finance.length} entries</span>
+              </div>
+              <div className="ledger-items">
+                {data.finance.map((item) => (
+                  <div className="ledger-row" key={item._id}>
+                    <div className="ledger-info">
+                      <strong>{item.client}</strong>
+                      <small>
+                        {item.category || 'General'} · {dateLabel(item.date)}
+                        {item.note && ` · ${item.note}`}
+                      </small>
+                    </div>
+                    <div className="ledger-amount">
+                      <strong className={item.type === 'income' ? 'val-positive' : 'val-negative'}>
+                        {item.type === 'income' ? '+' : '-'}
+                        {money(item.amount)}
+                      </strong>
+                      <button
+                        className="delete-tx-btn"
+                        onClick={() => deleteTransaction(item._id)}
+                        title="Delete entry"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {!data.finance.length && (
+                  <div className="empty-message">
+                    <p>No transactions found. Add one on the right to start tracking.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Add Transaction Form */}
+            <div className="panel form-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">NEW ENTRY</span>
+                  <h3>Add Transaction</h3>
+                </div>
+              </div>
+              <form className="tx-form" onSubmit={addTransaction}>
+                <div className="type-toggle">
+                  <button
+                    type="button"
+                    className={`toggle-btn ${financeForm.type === 'income' ? 'active-income' : ''}`}
+                    onClick={() => setFinanceForm({ ...financeForm, type: 'income' })}
+                  >
+                    Income (+)
+                  </button>
+                  <button
+                    type="button"
+                    className={`toggle-btn ${financeForm.type === 'expense' ? 'active-expense' : ''}`}
+                    onClick={() => setFinanceForm({ ...financeForm, type: 'expense' })}
+                  >
+                    Expense (-)
+                  </button>
+                </div>
+
+                <div className="form-group">
+                  <label>Client / Payee</label>
+                  <input
+                    placeholder="e.g. Acme Studio / Server Host"
+                    value={financeForm.client}
+                    onChange={(e) => setFinanceForm({ ...financeForm, client: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-row-2">
+                  <div className="form-group">
+                    <label>Amount (INR)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="₹ 50,000"
+                      value={financeForm.amount}
+                      onChange={(e) => setFinanceForm({ ...financeForm, amount: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Date</label>
+                    <input
+                      type="date"
+                      value={financeForm.date}
+                      onChange={(e) => setFinanceForm({ ...financeForm, date: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Category</label>
+                  <input
+                    placeholder="e.g. Website Development, Cloud Hosting"
+                    value={financeForm.category}
+                    onChange={(e) => setFinanceForm({ ...financeForm, category: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Note (Optional)</label>
+                  <input
+                    placeholder="e.g. Milestone 1 advance"
+                    value={financeForm.note}
+                    onChange={(e) => setFinanceForm({ ...financeForm, note: e.target.value })}
+                  />
+                </div>
+
+                {financeError && <p className="form-error-text">{financeError}</p>}
+
+                <button type="submit" className="submit-tx-btn">
+                  Record Entry
+                </button>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <style jsx>{styles}</style>
+      </AdminLayout>
+    </>
+  )
 }
 
+const loginStyles = `
+  .admin-login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: radial-gradient(circle at 10% 20%, rgba(211, 155, 69, 0.12), transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(13, 37, 63, 0.08), transparent 45%),
+                #f4f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .login-card {
+    width: min(440px, 100%);
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 42px 36px;
+    box-shadow: 0 20px 45px rgba(13, 37, 63, 0.1);
+    border: 1px solid #e2e8f0;
+  }
+
+  .brand-wrap :global(.brand-logo) {
+    display: block;
+    width: 155px;
+    height: 42px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .login-header {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+
+  .login-tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #ad702c;
+    text-transform: uppercase;
+  }
+
+  .login-header h1 {
+    margin: 6px 0 8px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0d253f;
+  }
+
+  .login-header p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .field input {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.92rem;
+    color: #0f172a;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .field input:focus {
+    border-color: #0d253f;
+  }
+
+  .password-input-wrap {
+    position: relative;
+    display: flex;
+  }
+
+  .password-input-wrap input {
+    width: 100%;
+    padding-right: 60px;
+  }
+
+  .toggle-pass-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .error-alert {
+    margin: 0;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+  }
+
+  .login-btn {
+    margin-top: 6px;
+    background: #0d253f;
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    padding: 13px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .login-btn:hover {
+    background: #173b5e;
+  }
+`
+
 const styles = `
-  :global(body) { background: #f4f0e9; color: #132b43; }
-  .admin-page { max-width: 1440px; margin: 0 auto; padding: 42px 5vw 70px; }
-  .admin-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 34px; }
-  .kicker { color: #ad702c; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 9px; }
-  h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: 0; margin: 0; }
-  h1 { color: #102e4a; font-size: clamp(2.3rem, 4vw, 4.2rem); }
-  h2 { font-size: 1.65rem; color: #173b5e; }
-  .subhead, .login-copy { color: #687582; margin: 12px 0 0; }
-  .header-actions, .filters { display: flex; gap: 10px; align-items: center; }
-  button { font: inherit; cursor: pointer; }
-  .refresh-button, .logout-button, .primary-button { border: 0; border-radius: 5px; padding: 12px 16px; font-weight: 700; }
-  .refresh-button { color: #173b5e; background: #fff; border: 1px solid #dfe0dc; }
-  .logout-button { color: #946527; background: transparent; }
-  .primary-button { color: #fff; background: #173b5e; width: 100%; }
-  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
-  .stat-card, .panel { background: rgba(255,255,255,.75); border: 1px solid rgba(23,59,94,.1); border-radius: 8px; }
-  .stat-card { padding: 22px; min-height: 140px; display: flex; flex-direction: column; }
-  .stat-card span { color: #6e7b83; font-size: .88rem; }
-  .stat-card strong { color: #173b5e; font: 400 2.15rem Georgia, serif; margin: 15px 0 7px; }
-  .stat-card small { color: #87918e; }.positive { color: #21835d !important; }.negative { color: #b65f4d !important; }.highlight { background: #173b5e; }.highlight span, .highlight strong, .highlight small { color: #fff; }.highlight small { opacity: .65; }
-  .chart-grid, .finance-layout { display: grid; grid-template-columns: 1.25fr .75fr; gap: 14px; margin-bottom: 14px; }
-  .panel { padding: 24px; }.panel-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; }.panel-note { color: #87918e; font-size: .85rem; }
-  .bar-chart { height: 200px; display: flex; align-items: end; gap: clamp(14px, 4vw, 42px); padding: 15px 10px 0; border-bottom: 1px solid #d9ddd7; }.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; color: #87918e; }.bar { width: min(42px, 70%); background: #d39b45; border-radius: 3px 3px 0 0; min-height: 18px; }.bar-value { color: #173b5e; font-weight: 700; }.bar-item small { font-size: .75rem; }.donut-wrap { min-height: 200px; display: flex; justify-content: center; align-items: center; gap: 25px; }.donut { width: 170px; height: 170px; border-radius: 50%; display: grid; place-items: center; }.donut > div { width: 112px; height: 112px; border-radius: 50%; background: #fff; display: grid; place-content: center; text-align: center; }.donut strong { color: #173b5e; font: 400 1.2rem Georgia, serif; }.donut small { color: #87918e; font-size: .7rem; }.legend { display: grid; gap: 14px; color: #687582; font-size: .85rem; }.legend span { display: grid; grid-template-columns: 10px auto; gap: 7px; }.legend b { grid-column: 2; color: #173b5e; }.legend i { width: 9px; height: 9px; border-radius: 50%; margin-top: 3px; }.income-dot { background: #d39b45; }.expense-dot { background: #173b5e; }
-  .filters input, .filters select, .finance-form input, .login-panel input { border: 1px solid #dfe0dc; border-radius: 4px; padding: 11px 12px; background: #fff; color: #173b5e; font: inherit; min-width: 0; }.filters input { width: 210px; }.filters select { width: 130px; }
-  .table-wrap { overflow-x: auto; } table { width: 100%; border-collapse: collapse; text-align: left; min-width: 760px; } th { color: #87918e; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; padding: 0 14px 12px; } td { border-top: 1px solid #ecece7; padding: 15px 14px; color: #53636e; font-size: .9rem; } td:first-child { color: #173b5e; } td small, .transaction small { display: block; color: #8b9697; margin-top: 4px; }.status-pill { color: #21835d; background: #e3f3eb; border-radius: 20px; padding: 5px 10px; font-size: .75rem; }
-  .transaction-list { display: grid; gap: 1px; }.transaction { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 18px; padding: 14px 0; border-top: 1px solid #ecece7; color: #173b5e; }.delete-button { border: 0; background: transparent; color: #a5aaa6; font-size: 1.3rem; }.delete-button:hover { color: #b65f4d; }.finance-form { display: grid; gap: 11px; }.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }.segmented { display: grid; grid-template-columns: 1fr 1fr; background: #eeeae2; padding: 4px; border-radius: 5px; margin-bottom: 3px; }.segmented button { border: 0; background: transparent; border-radius: 3px; padding: 9px; color: #687582; }.segmented .selected { background: #21835d; color: #fff; }.segmented .expense-selected { background: #b65f4d; }.form-error { color: #b65f4d; margin: 0; font-size: .85rem; }.empty-state { color: #87918e; font-size: .9rem; padding: 18px 0; }.admin-login { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top right, #f7e5c7, transparent 40%), #f4f0e9; }.login-panel { width: min(420px, 100%); background: #fff; padding: 45px; border: 1px solid #e6e0d5; border-radius: 8px; box-shadow: 0 25px 60px rgba(23,59,94,.1); }.login-mark { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 50%; background: #173b5e; color: #d39b45; font-weight: 800; }.login-panel h1 { font-size: 2.6rem; margin-top: 25px; }.login-panel form { display: grid; gap: 16px; margin-top: 30px; }.login-panel label { display: grid; gap: 7px; color: #53636e; font-size: .85rem; font-weight: 700; }.login-panel input { width: 100%; }.login-panel .primary-button { margin-top: 4px; padding: 14px; }
-  @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); }.chart-grid, .finance-layout { grid-template-columns: 1fr; } }.@media (max-width: 620px) { .admin-page { padding: 28px 16px 50px; }.admin-header { display: block; }.header-actions { margin-top: 22px; }.stat-grid { grid-template-columns: 1fr 1fr; }.stat-card { padding: 16px; min-height: 120px; }.stat-card strong { font-size: 1.55rem; }.panel { padding: 17px; }.panel-heading { display: block; }.filters { margin-top: 16px; }.filters input { width: 100%; }.filters select { width: 125px; }.donut-wrap { gap: 14px; }.donut { width: 135px; height: 135px; }.donut > div { width: 90px; height: 90px; }.login-panel { padding: 30px 24px; } }
+  .dashboard-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Welcome Banner */
+  .welcome-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #0d253f 0%, #173b5e 100%);
+    color: #fff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(13, 37, 63, 0.12);
+  }
+
+  .welcome-banner h2 {
+    margin: 0 0 6px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .welcome-banner p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .banner-stats {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .banner-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-num {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #d39b45;
+  }
+
+  .banner-stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  /* Stat Grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .card-kicker {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #64748b;
+  }
+
+  .card-icon-tag {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+  }
+
+  .bg-blue {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .bg-green {
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  .bg-red {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+
+  .bg-gold {
+    background: rgba(211, 155, 69, 0.2);
+    color: #d39b45;
+  }
+
+  .metric-val {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .text-green {
+    color: #16a34a;
+  }
+
+  .text-red {
+    color: #dc2626;
+  }
+
+  .highlight-card {
+    background: #0d253f;
+    border-color: #0d253f;
+    color: #fff;
+  }
+
+  .highlight-card .card-kicker {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .highlight-val {
+    color: #ffffff;
+  }
+
+  .highlight-sub {
+    color: rgba(255, 255, 255, 0.65) !important;
+  }
+
+  .metric-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .badge-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 12px;
+  }
+
+  .positive-pill {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .negative-pill {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .footer-sub {
+    font-size: 0.78rem;
+    color: #94a3b8;
+  }
+
+  /* Panels Common */
+  .panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .panel-kicker {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #ad702c;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .panel-header h3 {
+    margin: 0;
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .count-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* Charts */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+  }
+
+  .bar-chart-container {
+    height: 190px;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 0;
+  }
+
+  .bar-chart {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 100%;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px;
+  }
+
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .bar-tooltip {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0d253f;
+  }
+
+  .bar-fill {
+    width: 36px;
+    max-width: 70%;
+    background: linear-gradient(180deg, #e8b76c 0%, #d39b45 100%);
+    border-radius: 4px 4px 0 0;
+    min-height: 16px;
+    transition: height 0.4s ease;
+  }
+
+  .bar-label {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .chart-empty {
+    width: 100%;
+    text-align: center;
+    color: #94a3b8;
+    padding: 50px 0;
+    font-size: 0.88rem;
+  }
+
+  /* Donut */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    min-height: 190px;
+  }
+
+  .donut-circle {
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .donut-inner {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6px;
+  }
+
+  .donut-inner strong {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #0d253f;
+  }
+
+  .donut-inner small {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  .dot-income {
+    background: #d39b45;
+  }
+
+  .dot-expense {
+    background: #0d253f;
+  }
+
+  .legend-name {
+    color: #64748b;
+    width: 60px;
+  }
+
+  /* Table */
+  .table-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-box svg {
+    position: absolute;
+    left: 10px;
+    color: #94a3b8;
+  }
+
+  .search-box input {
+    padding: 8px 12px 8px 32px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    color: #0f172a;
+    width: 230px;
+    outline: none;
+  }
+
+  .select-status {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    color: #0f172a;
+    background: #fff;
+    outline: none;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+    text-align: left;
+  }
+
+  .admin-table th {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .admin-table td {
+    padding: 14px;
+    font-size: 0.88rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .client-cell-name {
+    display: block;
+    color: #0d253f;
+    font-size: 0.9rem;
+  }
+
+  .cell-sub {
+    display: block;
+    font-size: 0.76rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  .budget-tag {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #ecfdf5;
+    color: #047857;
+  }
+
+  .empty-message {
+    padding: 40px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.88rem;
+  }
+
+  /* Finance Grid */
+  .finance-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 16px;
+  }
+
+  .ledger-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .ledger-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+
+  .ledger-info strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #0d253f;
+  }
+
+  .ledger-info small {
+    display: block;
+    font-size: 0.74rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  .ledger-amount {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .val-positive {
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .val-negative {
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .delete-tx-btn {
+    background: transparent;
+    border: 0;
+    color: #cbd5e1;
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+  }
+
+  .delete-tx-btn:hover {
+    color: #ef4444;
+  }
+
+  /* Transaction Form */
+  .tx-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .type-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+
+  .toggle-btn {
+    border: 0;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.15s ease;
+  }
+
+  .active-income {
+    background: #16a34a;
+    color: #ffffff;
+  }
+
+  .active-expense {
+    background: #dc2626;
+    color: #ffffff;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-group label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #475569;
+  }
+
+  .form-group input {
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    color: #0f172a;
+    outline: none;
+  }
+
+  .form-group input:focus {
+    border-color: #0d253f;
+  }
+
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .form-error-text {
+    color: #dc2626;
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .submit-tx-btn {
+    margin-top: 4px;
+    background: #0d253f;
+    color: #fff;
+    border: 0;
+    padding: 11px;
+    border-radius: 7px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .submit-tx-btn:hover {
+    background: #173b5e;
+  }
+
+  /* Breakpoints */
+  @media (max-width: 1024px) {
+    .stat-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .chart-grid, .finance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .welcome-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .banner-stats {
+      width: 100%;
+      justify-content: space-around;
+    }
+    .stat-grid {
+      grid-template-columns: 1fr;
+    }
+    .donut-wrap {
+      flex-direction: column;
+      gap: 18px;
+    }
+    .filter-controls {
+      width: 100%;
+    }
+    .search-box {
+      flex: 1;
+    }
+    .search-box input {
+      width: 100%;
+    }
+  }
 `

@@ -1,31 +1,46 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import AdminLayout from '../components/AdminLayout.jsx'
 import AdminClients from '../components/AdminClients.jsx'
 import BrandLogo from '../components/BrandLogo.jsx'
 
 export default function AdminClientsPage() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
   const [clients, setClients] = useState([])
   const [loggedIn, setLoggedIn] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const loadClients = async () => {
-    const response = await fetch('/api/admin-data')
-    if (!response.ok) {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/admin-data')
+      if (!response.ok) {
+        setLoggedIn(false)
+      } else {
+        const data = await response.json()
+        setClients(data.clients || [])
+        setLoggedIn(true)
+      }
+    } catch {
       setLoggedIn(false)
-      return
     }
-    const data = await response.json()
-    setClients(data.clients || [])
-    setLoggedIn(true)
+    setLoading(false)
   }
 
-  useEffect(() => { loadClients() }, [])
+  useEffect(() => {
+    loadClients()
+  }, [])
 
   const login = async (event) => {
     event.preventDefault()
     setError('')
-    const response = await fetch('/api/admin-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(credentials) })
+    const response = await fetch('/api/admin-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
     if (!response.ok) {
       setError('Invalid username or password.')
       return
@@ -33,12 +48,276 @@ export default function AdminClientsPage() {
     loadClients()
   }
 
-  if (!loggedIn) return <><Head><title>Client Management | Collablit Solutions</title></Head><main className="admin-login"><div className="login-panel"><BrandLogo /><p className="kicker">Collablit Solutions</p><h1>Client portals</h1><p className="login-copy">Sign in to update client workspaces.</p><form onSubmit={login}><label>Username<input value={credentials.username} onChange={(event) => setCredentials({ ...credentials, username: event.target.value })} required /></label><label>Password<input type="password" value={credentials.password} onChange={(event) => setCredentials({ ...credentials, password: event.target.value })} required /></label>{error && <p className="form-error">{error}</p>}<button className="primary-button">Open client manager</button></form></div><style jsx>{styles}</style></main></>
+  const logout = async () => {
+    await fetch('/api/admin-auth', { method: 'DELETE' })
+    setLoggedIn(false)
+  }
 
-  return <><Head><title>Client Management | Collablit Solutions</title></Head><main className="admin-page"><header><div><p className="kicker">Collablit Solutions / Client portals</p><h1>Keep every client in the loop.</h1><p className="subhead">Update progress and share documents by email.</p></div><div className="actions"><a href="/admin">← Admin dashboard</a><button onClick={async () => { await fetch('/api/admin-auth', { method: 'DELETE' }); setLoggedIn(false) }}>Sign out</button></div></header><AdminClients clients={clients} onUpdated={loadClients} /></main><style jsx>{styles}</style></>
+  if (!loggedIn) {
+    return (
+      <>
+        <Head>
+          <title>Client Management | Collablit Solutions</title>
+        </Head>
+        <main className="client-admin-login-screen">
+          <div className="login-box">
+            <div className="logo-box">
+              <BrandLogo />
+            </div>
+            <div className="box-header">
+              <span className="tag">CLIENT PORTALS</span>
+              <h1>Portal Manager</h1>
+              <p>Sign in with administrator credentials to manage client progress.</p>
+            </div>
+            <form onSubmit={login}>
+              <div className="field">
+                <label>Username</label>
+                <input
+                  value={credentials.username}
+                  onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                  placeholder="Enter username"
+                  required
+                />
+              </div>
+              <div className="field">
+                <label>Password</label>
+                <div className="pass-wrap">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={credentials.password}
+                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                    placeholder="Enter password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+              </div>
+              {error && <p className="error-alert">{error}</p>}
+              <button type="submit" className="login-btn">Access Portals</button>
+            </form>
+          </div>
+          <style jsx>{loginStyles}</style>
+        </main>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Client Management | Collablit Solutions</title>
+      </Head>
+      <AdminLayout
+        title="Client Portals & Progress"
+        kicker="Client Workspace"
+        onRefresh={loadClients}
+        onLogout={logout}
+        loading={loading}
+      >
+        <div className="portals-container">
+          <div className="portals-hero">
+            <div>
+              <h2>Client Workspace Dispatcher</h2>
+              <p>Update real-time milestones, set progress percentages, and upload document links for each client.</p>
+            </div>
+            <div className="hero-metric">
+              <span className="hero-num">{clients.length}</span>
+              <span className="hero-sub">Managed Portals</span>
+            </div>
+          </div>
+
+          <AdminClients clients={clients} onUpdated={loadClients} />
+        </div>
+
+        <style jsx>{`
+          .portals-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .portals-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+          }
+
+          .portals-hero h2 {
+            margin: 0 0 6px;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #0d253f;
+          }
+
+          .portals-hero p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #64748b;
+          }
+
+          .hero-metric {
+            background: #0d253f;
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 130px;
+          }
+
+          .hero-num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #d39b45;
+            line-height: 1;
+          }
+
+          .hero-sub {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+          }
+
+          @media (max-width: 640px) {
+            .portals-hero {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 16px;
+            }
+            .hero-metric {
+              width: 100%;
+            }
+          }
+        `}</style>
+      </AdminLayout>
+    </>
+  )
 }
 
-const styles = `
-  :global(body) { background: #f4f0e9; color: #132b43; }.admin-page { max-width: 1200px; margin: 0 auto; padding: 48px 5vw 70px; }.admin-page header { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 35px; }.kicker { color: #ad702c; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 9px; }.admin-page h1, .login-panel h1 { color: #102e4a; font: 400 clamp(2.3rem, 4vw, 4rem) Georgia, serif; margin: 0; }.subhead, .login-copy { color: #687582; margin: 12px 0 0; }.actions { display: flex; align-items: center; gap: 16px; }.actions a { color: #173b5e; text-decoration: none; font-weight: 700; }.actions button { color: #a16d2b; background: transparent; border: 0; font-weight: 700; cursor: pointer; }.admin-login { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top right, #f7e5c7, transparent 40%), #f4f0e9; }.login-panel { width: min(420px, 100%); background: #fff; padding: 45px; border: 1px solid #e6e0d5; border-radius: 8px; box-shadow: 0 25px 60px rgba(23,59,94,.1); }.login-mark { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 50%; background: #173b5e; color: #d39b45; font-weight: 800; }.login-panel h1 { font-size: 2.6rem; margin-top: 25px; }.login-panel form { display: grid; gap: 16px; margin-top: 30px; }.login-panel label { display: grid; gap: 7px; color: #53636e; font-size: .85rem; font-weight: 700; }.login-panel input { width: 100%; border: 1px solid #dfe0dc; border-radius: 4px; padding: 12px; font: inherit; }.primary-button { border: 0; border-radius: 5px; padding: 13px; color: #fff; background: #173b5e; font-weight: 700; cursor: pointer; }.form-error { color: #b65f4d; }
-  @media (max-width: 650px) { .admin-page { padding: 30px 16px; }.admin-page header { display: block; }.actions { margin-top: 20px; justify-content: space-between; }.login-panel { padding: 30px 24px; } }
+const loginStyles = `
+  .client-admin-login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f4f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .login-box {
+    width: min(420px, 100%);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 38px 32px;
+    box-shadow: 0 16px 36px rgba(13, 37, 63, 0.08);
+    border: 1px solid #e2e8f0;
+  }
+  .logo-box :global(.brand-logo) {
+    display: block;
+    width: 150px;
+    height: 40px;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .box-header {
+    margin: 20px 0 22px;
+  }
+  .tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #ad702c;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .box-header h1 {
+    margin: 4px 0 6px;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0d253f;
+  }
+  .box-header p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: #64748b;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+  }
+  .field input {
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    outline: none;
+  }
+  .pass-wrap {
+    position: relative;
+    display: flex;
+  }
+  .pass-wrap input {
+    width: 100%;
+    padding-right: 60px;
+  }
+  .toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: #64748b;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .error-alert {
+    margin: 0;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+  }
+  .login-btn {
+    margin-top: 6px;
+    background: #0d253f;
+    color: #fff;
+    border: 0;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .login-btn:hover {
+    background: #173b5e;
+  }
 `
