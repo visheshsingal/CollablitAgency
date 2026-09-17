@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import Navbar from '../components/Navbar.jsx'
+import Banner from '../components/Banner.jsx'
 import Footer from '../components/Footer.jsx'
 
 const developmentProjects = [
@@ -53,19 +54,14 @@ export default function ProjectsPage() {
       </Head>
 
       <Navbar />
+      <Banner
+        imageUrl="https://images.pexels.com/photos/33373082/pexels-photo-33373082.jpeg"
+        title="Work we&apos;re proud of"
+        highlight="proud of"
+        description="Strategy, design, and execution shaped around real business goals, from institutional trust to premium consumer brands."
+      />
 
       <main className="page-shell">
-        <section className="hero">
-          <div className="eyebrow-wrap">
-            <span className="eyebrow-dot" />
-            <span>Selected work</span>
-          </div>
-          <h1>Projects we&apos;re proud of</h1>
-          <p className="lede">
-            Strategy, design, and execution shaped around real business goals — from institutional trust to premium consumer brands.
-          </p>
-        </section>
-
         <section className="tabs-wrap">
           <div className="segmented-tabs" aria-label="Project categories">
             <div

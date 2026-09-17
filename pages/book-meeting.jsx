@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import Navbar from '../components/Navbar.jsx'
+import Banner from '../components/Banner.jsx'
 import Footer from '../components/Footer.jsx'
 
 export default function BookMeetingPage() {
@@ -91,17 +92,14 @@ export default function BookMeetingPage() {
       </Head>
 
       <Navbar />
+      <Banner
+        imageUrl="https://images.pexels.com/photos/8190805/pexels-photo-8190805.jpeg"
+        title="Plan your next move"
+        highlight="next move"
+        description="Share your business context, objectives, and timeline. We&apos;ll use this to understand the fit and prepare a more valuable conversation."
+      />
 
       <main className="page-shell">
-        <section className="intro">
-          <p className="eyebrow">Book a strategy call</p>
-          <h1>Tell us where you are and where you want to go.</h1>
-          <p className="lede">
-            Share your business context, objectives, and timeline. We&apos;ll use this
-            to understand the fit and prepare a more valuable conversation.
-          </p>
-        </section>
-
         <section className="meeting-layout">
           <div className="info-card">
             <h2>What we want to learn</h2>

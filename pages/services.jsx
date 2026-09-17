@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Navbar from '../components/Navbar.jsx'
+import Banner from '../components/Banner.jsx'
 import Footer from '../components/Footer.jsx'
 
 const services = [
@@ -51,23 +52,14 @@ export default function ServicesPage() {
       </Head>
 
       <Navbar />
+      <Banner
+        imageUrl="https://images.pexels.com/photos/6803551/pexels-photo-6803551.jpeg"
+        title="Digital services built for brands ready to grow."
+        highlight="brands ready to grow."
+        description="We help founders and businesses turn fragmented digital presence into one sharp, credible, conversion-driven system."
+      />
 
       <main className="page-shell">
-        <section className="hero">
-          <div className="eyebrow-wrap">
-            <span className="eyebrow-dot" />
-            <span>Services</span>
-          </div>
-
-          <h1>
-            Premium digital services built for <span>brands that want to grow with clarity.</span>
-          </h1>
-
-          <p className="lede">
-            We help founders and businesses turn fragmented digital presence into one sharp, credible, conversion-driven system.
-          </p>
-        </section>
-
         <section className="services-grid">
           {services.map((service) => (
             <article key={service.num} className="service-card">

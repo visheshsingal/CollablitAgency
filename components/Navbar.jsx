@@ -16,6 +16,8 @@ export default function Navbar() {
     { href: '/book-meeting', label: 'Book a Meeting' },
   ]
 
+  const clientLogin = { href: '/client-login', label: 'Client Login' }
+
   const isActive = (href) => {
     if (href === '/') {
       return router.pathname === '/'
@@ -39,13 +41,22 @@ export default function Navbar() {
         <ul className="nav-links">
           {links.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className={`nav-link ${isActive(l.href) ? 'is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>
-                <span className="nav-link-dot" aria-hidden="true" />
+              <Link href={l.href} className={`nav-link ${l.href === '/book-meeting' ? 'nav-link-cta' : ''} ${isActive(l.href) ? 'is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>
+                {l.href !== '/book-meeting' && <span className="nav-link-dot" aria-hidden="true" />}
                 {l.label}
               </Link>
             </li>
           ))}
         </ul>
+
+        <Link
+          href={clientLogin.href}
+          className={`client-login-cta ${isActive(clientLogin.href) ? 'is-active' : ''}`}
+          aria-current={isActive(clientLogin.href) ? 'page' : undefined}
+        >
+          <span className="client-login-icon" aria-hidden="true">↗</span>
+          {clientLogin.label}
+        </Link>
 
         <button
           className={`burger ${menuOpen ? 'burger--open' : ''}`}
@@ -63,9 +74,14 @@ export default function Navbar() {
         <ul>
           {links.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</Link>
+              <Link className={l.href === '/book-meeting' ? 'mobile-link-cta' : ''} href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</Link>
             </li>
           ))}
+          <li>
+            <Link className="mobile-client-login" href={clientLogin.href} onClick={() => setMenuOpen(false)}>
+              {clientLogin.label}
+            </Link>
+          </li>
         </ul>
       </div>
 
@@ -118,6 +134,12 @@ export default function Navbar() {
         .nav-link-dot{ width:3px; height:3px; border-radius:50%; background:#c9a227; opacity:0; transform:scale(0); transition:all 0.28s cubic-bezier(.34,1.56,.64,1) }
         .nav-link:hover{ color:#0b234a }
         .nav-link:hover .nav-link-dot{ opacity:1; transform:scale(1) }
+        .nav-link-cta { color:#fff; background:#0b234a; border-radius:7px; padding:11px 16px; box-shadow:0 7px 16px rgba(11,35,74,0.16); }
+        .nav-link-cta:hover, .nav-link-cta.is-active { color:#fff; background:#1d4694; transform:translateY(-1px); box-shadow:0 9px 20px rgba(11,35,74,0.22); }
+
+        .client-login-cta { display:inline-flex; align-items:center; gap:8px; color:#0b234a; background:#fff; border:1px solid #c9a227; border-radius:7px; padding:10px 14px; font-family:'Averia Serif Libre', Georgia, serif; font-size:12px; font-weight:700; letter-spacing:0.04em; text-decoration:none; box-shadow:0 5px 14px rgba(11,35,74,0.08); transition:background 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease; }
+        .client-login-cta:hover, .client-login-cta.is-active { color:#fff; background:#0b234a; transform:translateY(-1px); box-shadow:0 8px 18px rgba(11,35,74,0.18); }
+        .client-login-icon { color:#c9a227; font-size:15px; line-height:1; }
 
         .burger { display:none; flex-direction:column; gap:5px; width:28px; height:28px; background:none; border:none; cursor:pointer; }
         .burger span{ width:100%; height:1.5px; background:#0b234a; transition:all 0.3s }
@@ -126,9 +148,14 @@ export default function Navbar() {
         .mobile-panel--open { max-height:420px }
         .mobile-panel ul{ list-style:none; margin:0; padding:8px 20px 4px; display:flex; flex-direction:column; gap:6px }
         .mobile-panel a{ display:block; padding:12px 0; font-family:'Averia Serif Libre', Georgia, serif; font-size:15px; font-weight:600; color:#0b234a; text-decoration:none; border-bottom:1px solid rgba(11,35,74,0.03) }
+        .mobile-panel a.mobile-link-cta { color:#fff; background:#0b234a; border:0; border-radius:7px; text-align:center; margin:6px 0 8px; padding:13px 16px; }
+        .mobile-panel a.mobile-link-cta:hover { background:#1d4694; }
+        .mobile-panel a.mobile-client-login { color:#0b234a; border:1px solid #c9a227; border-radius:7px; text-align:center; margin:6px 0 2px; padding:12px 16px; }
+        .mobile-panel a.mobile-client-login:hover { color:#fff; background:#0b234a; }
 
         @media (max-width: 900px) {
           .nav-links { display:none }
+          .client-login-cta { display:none }
           .burger { display:flex }
           .nav-inner {
             padding: 12px 14px;

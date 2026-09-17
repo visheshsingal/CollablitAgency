@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { createPassword, hashPassword, normalizeEmail } from '../../lib/client-auth'
 
 const toEmail = process.env.TO_EMAIL || 'vishesh.singal.contact@gmail.com'
 
@@ -136,6 +137,26 @@ function formatUserMeetingEmail(data, meetLink) {
   }
 }
 
+function formatClientAccessEmail(data, meetLink, username, password) {
+  return {
+    subject: 'Your Collablit client portal access',
+    text: [
+      `Hi ${data.name || 'there'},`,
+      '',
+      'Your client portal is ready. Use these credentials to track your project:',
+      `Portal: ${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/client-login`,
+      `Username: ${username}`,
+      `Password: ${password}`,
+      '',
+      `Meeting link: ${meetLink || 'Available in your portal'}`,
+      'Please keep these credentials private.',
+      '',
+      'Collablit Solutions',
+    ].join('\n'),
+    html: `<div style="font-family:Arial,sans-serif;background:#f5f4f1;padding:30px 0;"><div style="max-width:620px;margin:0 auto;background:#fff;border-radius:16px;padding:30px;color:#1e2a3b;"><p style="color:#a16d2b;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;">Collablit Solutions</p><h2>Your client portal is ready</h2><p>Hi ${data.name || 'there'}, your private project dashboard has been created.</p><div style="background:#f4f0e9;border-radius:12px;padding:18px 20px;margin:22px 0;"><p><strong>Portal:</strong> <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/client-login">Open client login</a></p><p><strong>Username:</strong> ${username}</p><p><strong>Password:</strong> ${password}</p></div><p>You can view your project process, meeting details, and documents there. Please keep these credentials private.</p></div></div>`,
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
@@ -160,6 +181,62 @@ export default async function handler(req, res) {
 
   const meetLink = type === 'meeting' ? generateGoogleMeetLink() : null
   const mailData = type === 'meeting' ? formatMeetingEmail(cleaned, meetLink) : formatContactEmail(cleaned)
+  let clientAccess = null
+  let bookingError = null
+
+  if (type === 'meeting') {
+    try {
+      const { getDatabase } = await import('../../lib/mongodb')
+      const { ObjectId } = await import('mongodb')
+      const db = await getDatabase()
+      const email = normalizeEmail(cleaned.email)
+      const existingClient = await db.collection('clients').findOne({ email })
+      const password = existingClient ? null : createPassword()
+      const credentials = password ? hashPassword(password) : null
+      const initialClient = {
+        email,
+        username: email,
+        status: 'Onboarding',
+        progress: 10,
+        processSteps: [
+          { key: 'discovery', label: 'Discovery call', status: 'current' },
+          { key: 'strategy', label: 'Strategy and scope', status: 'upcoming' },
+          { key: 'production', label: 'Production', status: 'upcoming' },
+          { key: 'delivery', label: 'Delivery', status: 'upcoming' },
+        ],
+        documents: [],
+        createdAt: new Date(),
+      }
+      if (credentials) {
+        initialClient.passwordHash = credentials.passwordHash
+        initialClient.passwordSalt = credentials.salt
+        clientAccess = { username: email, password }
+      }
+      const clientResult = await db.collection('clients').updateOne(
+        { email },
+        {
+          $set: { name: cleaned.name, company: cleaned.company, updatedAt: new Date() },
+          $setOnInsert: initialClient,
+        },
+        { upsert: true },
+      )
+      await db.collection('bookings').insertOne({
+        ...cleaned,
+        email,
+        clientId: existingClient?._id || clientResult.upsertedId || new ObjectId(),
+        meetLink,
+        status: 'new',
+        createdAt: new Date(),
+      })
+    } catch (error) {
+      console.error('Booking database save failed:', error)
+      bookingError = error
+    }
+  }
+
+  if (type === 'meeting' && bookingError) {
+    return res.status(503).json({ message: 'We could not create your client portal right now. Please try again in a moment.' })
+  }
 
   if (!transporter) {
     console.log('[contact-form]', type, cleaned)
@@ -170,6 +247,8 @@ export default async function handler(req, res) {
       meetingDate: cleaned.meetingDate || null,
       meetingTime: cleaned.meetingTime || null,
       duration: cleaned.duration || null,
+      clientUsername: clientAccess?.username || null,
+      clientPassword: clientAccess?.password || null,
     })
   }
 
@@ -193,6 +272,17 @@ export default async function handler(req, res) {
         text: userMail.text,
         html: userMail.html,
       })
+      if (clientAccess?.password) {
+        const accessMail = formatClientAccessEmail(cleaned, meetLink, clientAccess.username, clientAccess.password)
+        await transporter.sendMail({
+          from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+          to: cleaned.email,
+          replyTo: toEmail,
+          subject: accessMail.subject,
+          text: accessMail.text,
+          html: accessMail.html,
+        })
+      }
     }
 
     return res.status(200).json({
@@ -202,6 +292,8 @@ export default async function handler(req, res) {
       meetingDate: cleaned.meetingDate || null,
       meetingTime: cleaned.meetingTime || null,
       duration: cleaned.duration || null,
+      clientUsername: clientAccess?.username || null,
+      clientPassword: clientAccess?.password || null,
     })
   } catch (error) {
     console.error('Email send failed:', error)

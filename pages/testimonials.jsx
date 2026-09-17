@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Navbar from '../components/Navbar.jsx'
+import Banner from '../components/Banner.jsx'
 import Footer from '../components/Footer.jsx'
 
 const testimonials = [
@@ -45,17 +46,14 @@ export default function TestimonialsPage() {
       </Head>
 
       <Navbar />
+      <Banner
+        imageUrl="https://images.pexels.com/photos/7495194/pexels-photo-7495194.jpeg"
+        title="What clients say"
+        highlight="clients say"
+        description="Real experiences from founders and teams who needed sharper positioning, stronger visuals, and digital systems that actually converted."
+      />
 
       <main className="page-shell">
-        <section className="hero-block">
-          <p className="eyebrow">Client feedback</p>
-          <h1>What clients say after the work starts.</h1>
-          <p className="lede">
-            Real experiences from founders and teams who needed sharper positioning,
-            stronger visuals, and digital systems that actually converted.
-          </p>
-        </section>
-
         <section className="testimonial-grid">
           {testimonials.map((item, index) => (
             <article key={item.name} className="testimonial-card">
