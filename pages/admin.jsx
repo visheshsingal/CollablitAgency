@@ -30,6 +30,27 @@ export default function AdminPage() {
 
   useEffect(() => { loadData() }, [])
 
+  useEffect(() => {
+    if (loggedIn || typeof document === 'undefined') return undefined
+    const input = document.querySelector('.admin-login input[type="password"]')
+    if (!input || input.parentElement.querySelector('.password-toggle')) return undefined
+    const wrapper = document.createElement('div')
+    wrapper.className = 'password-toggle-wrap'
+    input.parentElement.insertBefore(wrapper, input)
+    wrapper.appendChild(input)
+    const toggle = document.createElement('button')
+    toggle.type = 'button'
+    toggle.className = 'password-toggle'
+    toggle.textContent = 'Show'
+    toggle.addEventListener('click', () => {
+      const visible = input.type === 'text'
+      input.type = visible ? 'password' : 'text'
+      toggle.textContent = visible ? 'Show' : 'Hide'
+    })
+    wrapper.appendChild(toggle)
+    return () => toggle.remove()
+  }, [loggedIn])
+
   const login = async (event) => {
     event.preventDefault()
     setLoginError('')

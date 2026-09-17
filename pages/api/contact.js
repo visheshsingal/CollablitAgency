@@ -1,13 +1,21 @@
 import nodemailer from 'nodemailer'
-import { createPassword, hashPassword, normalizeEmail } from '../../lib/client-auth'
+import { hashPassword, normalizeEmail } from '../../lib/client-auth'
 
-const toEmail = process.env.TO_EMAIL || 'vishesh.singal.contact@gmail.com'
+const toEmail = process.env.TO_EMAIL
 
 function generateGoogleMeetLink() {
   const randomSegment = () =>
     Math.random().toString(36).replace(/[^a-z0-9]/g, '').slice(0, 4).padEnd(4, 'x')
 
   return `https://meet.google.com/${randomSegment()}-${randomSegment()}-${randomSegment()}`.toLowerCase()
+}
+
+function getSiteUrl(req) {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')
+  const forwardedProtocol = req.headers['x-forwarded-proto']
+  const protocol = forwardedProtocol ? String(forwardedProtocol).split(',')[0] : 'http'
+  const host = req.headers.host || 'localhost:3000'
+  return `${protocol}://${host}`
 }
 
 function formatContactEmail(data) {
@@ -90,7 +98,7 @@ function formatMeetingEmail(data, meetLink) {
   }
 }
 
-function formatUserMeetingEmail(data, meetLink) {
+function formatClientWelcomeEmail(data, meetLink, username, password, siteUrl) {
   const bookingBlock = `
     <div style="background:#f8f8f8;border:1px solid #e8e8e8;border-radius:14px;padding:18px 20px;margin:18px 0;">
       <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#7a6b4a;font-weight:700;margin-bottom:10px;">Your Session</div>
@@ -102,7 +110,7 @@ function formatUserMeetingEmail(data, meetLink) {
   `
 
   return {
-    subject: 'Your strategy call is booked with Collablit Solutions',
+    subject: 'Your Collablit meeting and client portal access',
     text: [
       `Hi ${data.name || 'there'},`,
       '',
@@ -111,6 +119,11 @@ function formatUserMeetingEmail(data, meetLink) {
       `Time: ${data.meetingTime || 'To be confirmed'}`,
       `Duration: ${data.duration || '30 mins'}`,
       `Google Meet Link: ${meetLink || 'N/A'}`,
+      '',
+      'Client portal access:',
+      `Portal: ${siteUrl}/client-login`,
+      `Username: ${username}`,
+      `Password: ${password || 'Your existing portal password'}`,
       '',
       'Click the meeting link to join the call.',
       '',
@@ -122,38 +135,24 @@ function formatUserMeetingEmail(data, meetLink) {
         <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e5ddd0;border-radius:18px;overflow:hidden;box-shadow:0 18px 55px rgba(12,28,52,0.08);">
           <div style="background:linear-gradient(135deg,#0f223c,#1d4694);padding:26px 30px;color:#fff;">
             <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e2c77d;font-weight:700;">Collablit Solutions</div>
-            <h2 style="margin:10px 0 0;font-size:28px;line-height:1.3;">Your Strategy Call Is Booked</h2>
+            <h2 style="margin:10px 0 0;font-size:28px;line-height:1.3;">Your Meeting &amp; Portal Access</h2>
           </div>
           <div style="padding:28px 30px; color:#1e2a3b;">
             <p style="margin:0 0 12px;">Hi ${data.name || 'there'},</p>
             <p style="margin:0 0 18px;line-height:1.7;">Thanks for booking a strategy call with us. We&apos;re looking forward to speaking with you.</p>
             ${bookingBlock}
+            <div style="background:#f7f5ef;border:1px solid #e7dcc0;border-radius:14px;padding:18px 20px;margin:18px 0;">
+              <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#8a6a22;font-weight:700;margin-bottom:10px;">Client Portal Login</div>
+              <p style="margin:5px 0;color:#1e2a3b;"><strong>Portal:</strong> <a href="${siteUrl}/client-login">Open Client Login</a></p>
+              <p style="margin:5px 0;color:#1e2a3b;"><strong>Username:</strong> ${username}</p>
+              <p style="margin:5px 0;color:#1e2a3b;"><strong>Password:</strong> ${password || 'Your existing portal password'}</p>
+            </div>
             <p style="margin:18px 0 0;line-height:1.7;">Click the meeting link above to join your call. If anything changes, we&apos;ll reach out.</p>
             <p style="margin:18px 0 0;">Warm regards,<br /><strong>Collablit Solutions</strong></p>
           </div>
         </div>
       </div>
     `,
-  }
-}
-
-function formatClientAccessEmail(data, meetLink, username, password) {
-  return {
-    subject: 'Your Collablit client portal access',
-    text: [
-      `Hi ${data.name || 'there'},`,
-      '',
-      'Your client portal is ready. Use these credentials to track your project:',
-      `Portal: ${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/client-login`,
-      `Username: ${username}`,
-      `Password: ${password}`,
-      '',
-      `Meeting link: ${meetLink || 'Available in your portal'}`,
-      'Please keep these credentials private.',
-      '',
-      'Collablit Solutions',
-    ].join('\n'),
-    html: `<div style="font-family:Arial,sans-serif;background:#f5f4f1;padding:30px 0;"><div style="max-width:620px;margin:0 auto;background:#fff;border-radius:16px;padding:30px;color:#1e2a3b;"><p style="color:#a16d2b;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;">Collablit Solutions</p><h2>Your client portal is ready</h2><p>Hi ${data.name || 'there'}, your private project dashboard has been created.</p><div style="background:#f4f0e9;border-radius:12px;padding:18px 20px;margin:22px 0;"><p><strong>Portal:</strong> <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/client-login">Open client login</a></p><p><strong>Username:</strong> ${username}</p><p><strong>Password:</strong> ${password}</p></div><p>You can view your project process, meeting details, and documents there. Please keep these credentials private.</p></div></div>`,
   }
 }
 
@@ -191,7 +190,7 @@ export default async function handler(req, res) {
       const db = await getDatabase()
       const email = normalizeEmail(cleaned.email)
       const existingClient = await db.collection('clients').findOne({ email })
-      const password = existingClient ? null : createPassword()
+      const password = existingClient ? null : String(cleaned.name || '').trim()
       const credentials = password ? hashPassword(password) : null
       const initialClient = {
         email,
@@ -253,17 +252,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-      to: toEmail,
-      replyTo: cleaned.email || process.env.EMAIL_USER,
-      subject: mailData.subject,
-      text: mailData.text,
-      html: mailData.html,
-    })
+    if (toEmail) {
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+        to: toEmail,
+        replyTo: cleaned.email || process.env.EMAIL_USER,
+        subject: mailData.subject,
+        text: mailData.text,
+        html: mailData.html,
+      })
+    }
 
     if (type === 'meeting' && cleaned.email) {
-      const userMail = formatUserMeetingEmail(cleaned, meetLink)
+      const userMail = formatClientWelcomeEmail(cleaned, meetLink, clientAccess?.username || normalizeEmail(cleaned.email), clientAccess?.password || cleaned.name, getSiteUrl(req))
       await transporter.sendMail({
         from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
         to: cleaned.email,
@@ -272,17 +273,6 @@ export default async function handler(req, res) {
         text: userMail.text,
         html: userMail.html,
       })
-      if (clientAccess?.password) {
-        const accessMail = formatClientAccessEmail(cleaned, meetLink, clientAccess.username, clientAccess.password)
-        await transporter.sendMail({
-          from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-          to: cleaned.email,
-          replyTo: toEmail,
-          subject: accessMail.subject,
-          text: accessMail.text,
-          html: accessMail.html,
-        })
-      }
     }
 
     return res.status(200).json({
