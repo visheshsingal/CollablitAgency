@@ -44,6 +44,24 @@ html {
   scroll-behavior: smooth;
 }
 
+.admin-login {
+  background: linear-gradient(115deg, rgba(8, 29, 53, .94), rgba(12, 48, 80, .78)), url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=2000') center / cover !important;
+}
+
+.admin-login .login-panel {
+  background: rgba(255, 255, 255, .96) !important;
+  border-color: rgba(211, 155, 69, .55) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .3) !important;
+}
+
+.admin-login .login-panel .brand-logo {
+  display: block;
+  width: 170px;
+  height: auto;
+  margin-bottom: 24px;
+}
+
 /* Skip link for keyboard users */
 .skip-link {
   position: absolute;

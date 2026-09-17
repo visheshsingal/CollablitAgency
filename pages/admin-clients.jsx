@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import AdminClients from '../components/AdminClients.jsx'
+import BrandLogo from '../components/BrandLogo.jsx'
 
 export default function AdminClientsPage() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
@@ -32,7 +33,7 @@ export default function AdminClientsPage() {
     loadClients()
   }
 
-  if (!loggedIn) return <><Head><title>Client Management | Collablit Solutions</title></Head><main className="admin-login"><div className="login-panel"><span className="login-mark">CS</span><p className="kicker">Collablit Solutions</p><h1>Client portals</h1><p className="login-copy">Sign in to update client workspaces.</p><form onSubmit={login}><label>Username<input value={credentials.username} onChange={(event) => setCredentials({ ...credentials, username: event.target.value })} required /></label><label>Password<input type="password" value={credentials.password} onChange={(event) => setCredentials({ ...credentials, password: event.target.value })} required /></label>{error && <p className="form-error">{error}</p>}<button className="primary-button">Open client manager</button></form></div><style jsx>{styles}</style></main></>
+  if (!loggedIn) return <><Head><title>Client Management | Collablit Solutions</title></Head><main className="admin-login"><div className="login-panel"><BrandLogo /><p className="kicker">Collablit Solutions</p><h1>Client portals</h1><p className="login-copy">Sign in to update client workspaces.</p><form onSubmit={login}><label>Username<input value={credentials.username} onChange={(event) => setCredentials({ ...credentials, username: event.target.value })} required /></label><label>Password<input type="password" value={credentials.password} onChange={(event) => setCredentials({ ...credentials, password: event.target.value })} required /></label>{error && <p className="form-error">{error}</p>}<button className="primary-button">Open client manager</button></form></div><style jsx>{styles}</style></main></>
 
   return <><Head><title>Client Management | Collablit Solutions</title></Head><main className="admin-page"><header><div><p className="kicker">Collablit Solutions / Client portals</p><h1>Keep every client in the loop.</h1><p className="subhead">Update progress and share documents by email.</p></div><div className="actions"><a href="/admin">← Admin dashboard</a><button onClick={async () => { await fetch('/api/admin-auth', { method: 'DELETE' }); setLoggedIn(false) }}>Sign out</button></div></header><AdminClients clients={clients} onUpdated={loadClients} /></main><style jsx>{styles}</style></>
 }
