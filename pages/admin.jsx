@@ -153,7 +153,7 @@ export default function AdminPage() {
           <section className="login-brand-pane">
             <div className="pane-glow" />
             <div className="pane-inner">
-              <BrandLogo compact />
+              <BrandLogo compact light />
               <p className="pane-eyebrow">Operations console</p>
               <h2>Leads, ledger, and client work — managed with care.</h2>
               <p className="pane-lead">
@@ -694,12 +694,12 @@ const loginStyles = `
 
   .pane-inner :global(.brand-logo) {
     display: block;
-    width: 168px;
-    height: 42px;
+    width: auto;
+    height: 26px;
+    max-width: 112px;
     object-fit: contain;
     object-position: left center;
-    filter: brightness(0) invert(1);
-    margin-bottom: 36px;
+    margin-bottom: 28px;
   }
 
   .pane-eyebrow {
@@ -818,11 +818,11 @@ const loginStyles = `
   }
 
   .mobile-brand :global(.brand-logo) {
-    width: 148px;
-    height: 38px;
+    width: auto;
+    height: 26px;
+    max-width: 112px;
     object-fit: contain;
     object-position: left center;
-    filter: none !important;
   }
 
   .login-header {

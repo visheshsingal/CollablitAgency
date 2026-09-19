@@ -4,9 +4,10 @@ import BrandLogo from './BrandLogo.jsx'
 export default function ClientSidebar({ name, onLogout }) {
   const router = useRouter()
   const items = [
-    { href: '/client-dashboard', label: 'Workspace', icon: '⌂' },
-    { href: '/client-dashboard#process', label: 'Project process', icon: '◌' },
-    { href: '/client-dashboard#documents', label: 'Documents', icon: '▣' },
+    { href: '/client-dashboard', label: 'Overview', icon: '⌂' },
+    { href: '/client-process', label: 'Project process', icon: '◌' },
+    { href: '/client-documents', label: 'Documents', icon: '▣' },
+    { href: '/client-meetings', label: 'Meetings', icon: '◷' },
   ]
 
   return <aside className="client-sidebar"><div className="sidebar-logo"><BrandLogo /></div><p className="sidebar-label">Client workspace</p><nav>{items.map((item) => <a href={item.href} className={router.asPath === item.href || (item.href === '/client-dashboard' && router.pathname === item.href) ? 'active' : ''} key={item.href}><i>{item.icon}</i>{item.label}</a>)}</nav><div className="sidebar-user"><span>{(name || 'C').charAt(0).toUpperCase()}</span><div><strong>{name || 'Client'}</strong><small>Client account</small></div></div><button className="sidebar-logout" onClick={onLogout}>Sign out</button><style jsx>{`

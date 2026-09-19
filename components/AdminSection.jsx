@@ -85,7 +85,7 @@ export default function AdminSection({ section }) {
         <div className="bg-glow bottom-glow" />
         <div className="login-card">
           <div className="brand-wrap">
-            <BrandLogo compact />
+            <BrandLogo compact light />
           </div>
           <div className="login-header">
             <div className="badge-pill">
@@ -308,11 +308,11 @@ const loginStyles = `
   }
   .brand-wrap :global(.brand-logo) {
     display: block;
-    width: 150px;
-    height: 38px;
+    width: auto;
+    height: 26px;
+    max-width: 112px;
     object-fit: contain;
     object-position: left center;
-    filter: brightness(0) invert(1);
   }
   .login-header {
     margin-bottom: 22px;

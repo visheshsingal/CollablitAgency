@@ -43,7 +43,7 @@ export default function ClientLoginPage() {
         <section className="login-brand-pane" aria-hidden="false">
           <div className="pane-glow" />
           <div className="pane-inner">
-            <BrandLogo compact />
+            <BrandLogo compact light />
             <p className="pane-eyebrow">Client workspace</p>
             <h2>Your projects, documents, and meetings — in one place.</h2>
             <p className="pane-lead">
@@ -213,12 +213,12 @@ export default function ClientLoginPage() {
 
         .pane-inner :global(.brand-logo) {
           display: block;
-          width: 168px;
-          height: 42px;
+          width: auto;
+          height: 26px;
+          max-width: 112px;
           object-fit: contain;
           object-position: left center;
-          filter: brightness(0) invert(1);
-          margin-bottom: 36px;
+          margin-bottom: 28px;
         }
 
         .pane-eyebrow {
@@ -337,11 +337,11 @@ export default function ClientLoginPage() {
         }
 
         .mobile-brand :global(.brand-logo) {
-          width: 148px;
-          height: 38px;
+          width: auto;
+          height: 26px;
+          max-width: 112px;
           object-fit: contain;
           object-position: left center;
-          filter: none !important;
         }
 
         .card-header {

@@ -17,10 +17,9 @@ export default function AdminLayout({
   const navItems = [
     {
       href: '/admin',
-      label: 'Dashboard Overview',
-      badge: 'Main',
+      label: 'Overview',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="9" rx="1.5" />
           <rect x="14" y="3" width="7" height="5" rx="1.5" />
           <rect x="14" y="12" width="7" height="9" rx="1.5" />
@@ -30,9 +29,9 @@ export default function AdminLayout({
     },
     {
       href: '/admin-leads',
-      label: 'Leads & Inquiries',
+      label: 'Leads',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
           <circle cx="9" cy="7" r="4" />
           <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
@@ -42,9 +41,9 @@ export default function AdminLayout({
     },
     {
       href: '/admin-finance',
-      label: 'Finance & Ledger',
+      label: 'Finance',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="6" x2="12" y2="18" />
           <path d="M15 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1.5 2.5 3 3s3 1.5 3 3a2.5 2.5 0 0 1-5 0" />
@@ -65,43 +64,35 @@ export default function AdminLayout({
         {/* Glow ambient background element */}
         <div className="sidebar-glow-accent" />
 
-        {/* Brand Header */}
         <div className="sidebar-header">
-          <div className="logo-box">
-            <BrandLogo compact />
-          </div>
-          <div className="brand-badge-row">
-            <span className="live-indicator">
-              <span className="live-dot" />
-            </span>
-            <span className="brand-tag">Operations Console</span>
-          </div>
+          <Link href="/admin" passHref legacyBehavior>
+            <a className="logo-box">
+              <BrandLogo compact light />
+            </a>
+          </Link>
+          <p className="brand-tag">Admin console</p>
         </div>
 
-        {/* Navigation List - Only 3 requested items */}
         <div className="nav-container">
           <div className="nav-group-title">
-            <span>MAIN NAVIGATION</span>
+            <span>Menu</span>
           </div>
 
           <nav className="nav-list">
             {navItems.map((item) => {
               const isActive = router.pathname === item.href
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`nav-link-item ${isActive ? 'is-active' : ''}`}
-                  onClick={closeMobile}
-                >
-                  <div className={`nav-icon-box ${isActive ? 'icon-active' : ''}`}>
-                    {item.icon}
-                  </div>
-                  <span className="nav-label-text">{item.label}</span>
-                  {isActive && <div className="active-glow-pill" />}
-                  {item.badge && !isActive && (
-                    <span className="nav-badge">{item.badge}</span>
-                  )}
+                <Link key={item.href} href={item.href} passHref legacyBehavior>
+                  <a
+                    className={`nav-link-item ${isActive ? 'is-active' : ''}`}
+                    onClick={closeMobile}
+                  >
+                    <span className={`nav-icon-box ${isActive ? 'icon-active' : ''}`}>
+                      {item.icon}
+                    </span>
+                    <span className="nav-label-text">{item.label}</span>
+                    {isActive && <span className="active-glow-pill" />}
+                  </a>
                 </Link>
               )
             })}
@@ -212,7 +203,7 @@ export default function AdminLayout({
 
         /* Modern Premium Sidebar */
         .admin-sidebar {
-          width: 270px;
+          width: 248px;
           flex-shrink: 0;
           background: #091726;
           color: #fff;
@@ -223,7 +214,6 @@ export default function AdminLayout({
           height: 100vh;
           z-index: 80;
           border-right: 1px solid rgba(255, 255, 255, 0.07);
-          box-shadow: 4px 0 24px rgba(5, 14, 25, 0.25);
           overflow: hidden;
         }
 
@@ -243,55 +233,35 @@ export default function AdminLayout({
         .sidebar-header {
           position: relative;
           z-index: 1;
-          padding: 26px 22px 20px;
+          padding: 22px 18px 16px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .logo-box {
+          display: flex;
+          align-items: center;
+          height: 28px;
+          max-width: 120px;
+          overflow: hidden;
+          text-decoration: none;
         }
 
         .logo-box :global(.brand-logo) {
           display: block;
-          width: 145px;
-          height: 38px;
+          width: auto !important;
+          height: 26px !important;
+          max-width: 112px !important;
           object-fit: contain;
           object-position: left center;
-          filter: brightness(0) invert(1);
-          transition: transform 0.2s ease;
-        }
-
-        .logo-box:hover :global(.brand-logo) {
-          transform: scale(1.02);
-        }
-
-        .brand-badge-row {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          margin-top: 12px;
-          background: rgba(211, 155, 69, 0.08);
-          border: 1px solid rgba(211, 155, 69, 0.2);
-          padding: 4px 10px;
-          border-radius: 20px;
-        }
-
-        .live-indicator {
-          display: flex;
-          align-items: center;
-        }
-
-        .live-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #d39b45;
-          box-shadow: 0 0 8px #d39b45;
         }
 
         .brand-tag {
-          font-size: 0.7rem;
+          margin: 10px 0 0;
+          font-size: 0.68rem;
           font-weight: 700;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: #e2ad5c;
+          color: #c9a227;
         }
 
         /* Navigation List */

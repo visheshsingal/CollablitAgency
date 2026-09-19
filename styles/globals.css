@@ -57,13 +57,23 @@ html {
 
 .admin-login .login-panel .brand-logo {
   display: block;
-  width: 170px;
-  height: auto;
+  width: auto;
+  height: 28px;
+  max-width: 120px;
   margin-bottom: 24px;
+  object-fit: contain;
+}
+
+.brand-logo {
+  display: block;
+  object-fit: contain;
 }
 
 .brand-logo-compact {
-  filter: brightness(0) invert(1) !important;
+  height: 26px;
+  width: auto;
+  max-width: 112px;
+  object-fit: contain;
 }
 
 /* Skip link for keyboard users */

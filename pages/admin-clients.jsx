@@ -64,7 +64,7 @@ export default function AdminClientsPage() {
           <div className="bg-glow bottom-glow" />
           <div className="login-box">
             <div className="logo-box">
-              <BrandLogo compact />
+              <BrandLogo compact light />
             </div>
             <div className="box-header">
               <div className="badge-pill">
@@ -278,11 +278,11 @@ const loginStyles = `
   }
   .logo-box :global(.brand-logo) {
     display: block;
-    width: 150px;
-    height: 38px;
+    width: auto;
+    height: 26px;
+    max-width: 112px;
     object-fit: contain;
     object-position: left center;
-    filter: brightness(0) invert(1);
   }
   .box-header {
     margin-bottom: 22px;

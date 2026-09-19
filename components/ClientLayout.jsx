@@ -1,5 +1,7 @@
+
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import BrandLogo from './BrandLogo.jsx'
 
 export default function ClientLayout({
@@ -7,9 +9,10 @@ export default function ClientLayout({
   client = {},
   booking = null,
   onLogout,
+  kicker = 'Collablit Client Hub',
 }) {
+  const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('overview')
 
   const clientName = client?.name || 'Client'
   const companyName = client?.company || 'Active Workspace'
@@ -18,33 +21,30 @@ export default function ClientLayout({
 
   const navItems = [
     {
-      id: 'overview',
-      href: '#overview',
-      label: 'Workspace Overview',
+      href: '/client-dashboard',
+      label: 'Overview',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
           <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
       ),
     },
     {
-      id: 'process',
-      href: '#process',
+      href: '/client-process',
       label: 'Project Journey',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
         </svg>
       ),
     },
     {
-      id: 'documents',
-      href: '#documents',
-      label: 'Shared Documents',
+      href: '/client-documents',
+      label: 'Documents',
       badge: client?.documents?.length ? `${client.documents.length}` : null,
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
           <line x1="16" y1="13" x2="8" y2="13" />
@@ -53,11 +53,10 @@ export default function ClientLayout({
       ),
     },
     {
-      id: 'meetings',
-      href: '#meetings',
-      label: 'Meetings & Calls',
+      href: '/client-meetings',
+      label: 'Meetings',
       icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
           <line x1="16" y1="2" x2="16" y2="6" />
           <line x1="8" y1="2" x2="8" y2="6" />
@@ -65,22 +64,7 @@ export default function ClientLayout({
         </svg>
       ),
     },
-    {
-      id: 'contact',
-      href: '#contact',
-      label: 'Support & Help',
-      icon: (
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-      ),
-    },
   ]
-
-  const handleNavClick = (id) => {
-    setActiveSection(id)
-    setMobileOpen(false)
-  }
 
   return (
     <div className="client-shell">
@@ -92,44 +76,39 @@ export default function ClientLayout({
         {/* Glow ambient background accent */}
         <div className="sidebar-glow-accent" />
 
-        {/* Brand Header */}
         <div className="sidebar-header">
-          <div className="logo-box">
-            <BrandLogo compact />
-          </div>
-          <div className="brand-badge-row">
-            <span className="live-indicator">
-              <span className="live-dot" />
-            </span>
-            <span className="brand-tag">Client Workspace</span>
-          </div>
+          <Link href="/client-dashboard" passHref legacyBehavior>
+            <a className="logo-box">
+              <BrandLogo compact light />
+            </a>
+          </Link>
+          <p className="brand-tag">Client workspace</p>
         </div>
 
-        {/* Navigation List */}
         <div className="nav-container">
           <div className="nav-group-title">
-            <span>CLIENT MENU</span>
+            <span>Menu</span>
           </div>
 
           <nav className="nav-list">
             {navItems.map((item) => {
-              const isActive = activeSection === item.id
+              const isActive = router.pathname === item.href
               return (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  className={`nav-link-item ${isActive ? 'is-active' : ''}`}
-                  onClick={() => handleNavClick(item.id)}
-                >
-                  <div className={`nav-icon-box ${isActive ? 'icon-active' : ''}`}>
-                    {item.icon}
-                  </div>
-                  <span className="nav-label-text">{item.label}</span>
-                  {isActive && <div className="active-glow-pill" />}
-                  {item.badge && !isActive && (
-                    <span className="nav-badge">{item.badge}</span>
-                  )}
-                </a>
+                <Link key={item.href} href={item.href} passHref legacyBehavior>
+                  <a
+                    className={`nav-link-item ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span className={`nav-icon-box ${isActive ? 'icon-active' : ''}`}>
+                      {item.icon}
+                    </span>
+                    <span className="nav-label-text">{item.label}</span>
+                    {isActive && <span className="active-glow-pill" />}
+                    {item.badge && !isActive && (
+                      <span className="nav-badge">{item.badge}</span>
+                    )}
+                  </a>
+                </Link>
               )
             })}
           </nav>
@@ -178,7 +157,7 @@ export default function ClientLayout({
               </svg>
             </button>
             <div className="topbar-breadcrumb">
-              <span className="breadcrumb-kicker">Collablit Client Hub</span>
+              <span className="breadcrumb-kicker">{kicker}</span>
               <h1 className="breadcrumb-title">{companyName}</h1>
             </div>
           </div>
@@ -228,7 +207,7 @@ export default function ClientLayout({
 
         /* Sidebar matching Admin aesthetic */
         .client-sidebar {
-          width: 270px;
+          width: 248px;
           flex-shrink: 0;
           background: #091726;
           color: #fff;
@@ -239,7 +218,6 @@ export default function ClientLayout({
           height: 100vh;
           z-index: 80;
           border-right: 1px solid rgba(255, 255, 255, 0.07);
-          box-shadow: 4px 0 24px rgba(5, 14, 25, 0.25);
           overflow: hidden;
         }
 
@@ -257,55 +235,35 @@ export default function ClientLayout({
         .sidebar-header {
           position: relative;
           z-index: 1;
-          padding: 26px 22px 20px;
+          padding: 22px 18px 16px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .logo-box {
+          display: flex;
+          align-items: center;
+          height: 28px;
+          max-width: 120px;
+          overflow: hidden;
+          text-decoration: none;
         }
 
         .logo-box :global(.brand-logo) {
           display: block;
-          width: 145px;
-          height: 38px;
+          width: auto !important;
+          height: 26px !important;
+          max-width: 112px !important;
           object-fit: contain;
           object-position: left center;
-          filter: brightness(0) invert(1);
-          transition: transform 0.2s ease;
-        }
-
-        .logo-box:hover :global(.brand-logo) {
-          transform: scale(1.02);
-        }
-
-        .brand-badge-row {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          margin-top: 12px;
-          background: rgba(211, 155, 69, 0.08);
-          border: 1px solid rgba(211, 155, 69, 0.2);
-          padding: 4px 10px;
-          border-radius: 20px;
-        }
-
-        .live-indicator {
-          display: flex;
-          align-items: center;
-        }
-
-        .live-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #d39b45;
-          box-shadow: 0 0 8px #d39b45;
         }
 
         .brand-tag {
-          font-size: 0.7rem;
+          margin: 10px 0 0;
+          font-size: 0.68rem;
           font-weight: 700;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: #e2ad5c;
+          color: #c9a227;
         }
 
         /* Nav */
