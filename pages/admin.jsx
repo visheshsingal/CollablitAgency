@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   const [loginError, setLoginError] = useState('')
   const [data, setData] = useState({ bookings: [], finance: [], clients: [] })
   const [loading, setLoading] = useState(false)
@@ -52,6 +53,7 @@ export default function AdminPage() {
       setLoggedIn(false)
     }
     setLoading(false)
+    setCheckingAuth(false)
   }
 
   useEffect(() => {
@@ -141,6 +143,42 @@ export default function AdminPage() {
       ...current,
       finance: current.finance.filter((item) => item._id !== id),
     }))
+  }
+
+  if (checkingAuth) {
+    return (
+      <main className="admin-auth-checking">
+        <div className="admin-auth-spinner" />
+        <p>Checking admin access...</p>
+        <style jsx>{`
+          .admin-auth-checking {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            align-content: center;
+            gap: 14px;
+            background: #071422;
+            color: rgba(255, 255, 255, 0.72);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          }
+          .admin-auth-checking p {
+            margin: 0;
+            font-size: 0.88rem;
+          }
+          .admin-auth-spinner {
+            width: 34px;
+            height: 34px;
+            border: 3px solid rgba(255, 255, 255, 0.14);
+            border-top-color: #d39b45;
+            border-radius: 50%;
+            animation: admin-auth-spin 0.8s linear infinite;
+          }
+          @keyframes admin-auth-spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </main>
+    )
   }
 
   if (!loggedIn) {

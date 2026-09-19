@@ -64,6 +64,17 @@ export default function ClientLayout({
         </svg>
       ),
     },
+    {
+      href: '/client-password',
+      label: 'Change Password',
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2" />
+          <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+          <circle cx="12" cy="16" r="1" />
+        </svg>
+      ),
+    },
   ]
 
   return (

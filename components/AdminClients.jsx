@@ -110,7 +110,7 @@ export default function AdminClients({ clients = [], onUpdated }) {
           >
             {clients.map((c) => (
               <option value={c.email} key={c.email}>
-                {c.name || c.email} {c.company ? `(${c.company})` : ''}
+                {c.name || 'Unnamed client'} — {c.email}
               </option>
             ))}
           </select>
