@@ -18,6 +18,12 @@ export default function WorkPreview() {
     },
   ]
 
+  const designHighlights = [
+    { name: 'Flyers', image: 'https://i.ibb.co/M5J7sbH7/Flyer-Forge.png' },
+    { name: 'Logos', image: 'https://i.ibb.co/FLxV9CJv/Ilm-Kosh.png' },
+    { name: 'Car Posters', image: 'https://i.ibb.co/4RWcCP0s/Poster-Dodge-Charger-SRT-Hellcat.png' },
+  ]
+
   return (
     <section id="projects" className="work-section">
       <div className="work-inner">
@@ -95,6 +101,23 @@ export default function WorkPreview() {
               <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
+        </div>
+
+        <div className="design-highlight">
+          <div className="design-highlight-copy">
+            <span className="eyebrow">Design Studio</span>
+            <h3>Marks, posters, and visuals with a point of view.</h3>
+            <p>Explore our flyer, logo, and automotive poster work.</p>
+            <a href="/projects" className="design-link">Browse design work <span>↗</span></a>
+          </div>
+          <div className="design-highlight-grid">
+            {designHighlights.map((item) => (
+              <a href="/projects" className="design-highlight-card" key={item.name}>
+                <img src={item.image} alt={item.name} />
+                <span>{item.name}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -377,6 +400,88 @@ export default function WorkPreview() {
           margin-top: 88px;
         }
 
+        .design-highlight {
+          display: grid;
+          grid-template-columns: 0.8fr 1.2fr;
+          gap: 40px;
+          align-items: center;
+          margin-top: 104px;
+          padding-top: 72px;
+          border-top: 1px solid rgba(11, 35, 74, 0.1);
+        }
+
+        .design-highlight-copy h3 {
+          max-width: 390px;
+          margin: 0 0 14px;
+          color: #0b234a;
+          font-family: 'Fraunces', serif;
+          font-size: clamp(26px, 3vw, 38px);
+          line-height: 1.12;
+        }
+
+        .design-highlight-copy p {
+          margin: 0 0 20px;
+          color: #5b6472;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          line-height: 1.6;
+        }
+
+        .design-link {
+          color: #0b234a;
+          font-family: 'Inter', sans-serif;
+          font-size: 13px;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        .design-link span {
+          color: #b68d40;
+          font-size: 17px;
+          margin-left: 4px;
+        }
+
+        .design-highlight-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        .design-highlight-card {
+          position: relative;
+          display: block;
+          aspect-ratio: 0.82;
+          overflow: hidden;
+          border-radius: 9px;
+          background: #edf1f6;
+          text-decoration: none;
+          box-shadow: 0 16px 30px -20px rgba(11, 35, 74, 0.45);
+        }
+
+        .design-highlight-card img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.35s ease;
+        }
+
+        .design-highlight-card:hover img {
+          transform: scale(1.045);
+        }
+
+        .design-highlight-card span {
+          position: absolute;
+          right: 9px;
+          bottom: 9px;
+          left: 9px;
+          color: #fff;
+          font-family: 'Inter', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65);
+        }
+
         .cta-primary {
           display: inline-flex;
           align-items: center;
@@ -429,6 +534,13 @@ export default function WorkPreview() {
           .project-row.reverse .mockup,
           .project-row.reverse .project-info {
             order: unset;
+          }
+
+          .design-highlight {
+            grid-template-columns: 1fr;
+            gap: 28px;
+            margin-top: 72px;
+            padding-top: 52px;
           }
         }
 

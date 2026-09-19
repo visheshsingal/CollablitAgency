@@ -37,7 +37,112 @@ const developmentProjects = [
   },
 ]
 
-const designProjects = []
+const designProjects = [
+  {
+    name: 'Flyer Forge',
+    category: 'Flyers · Campaign Design',
+    description: 'Bold campaign artwork built to make an offer, event, or announcement impossible to miss.',
+    tags: ['Campaign Creative', 'Print-ready Design', 'Visual Direction'],
+    url: 'https://i.ibb.co/M5J7sbH7/Flyer-Forge.png',
+    image: 'https://i.ibb.co/M5J7sbH7/Flyer-Forge.png',
+  },
+  {
+    name: 'Flyer Wise Bytes',
+    category: 'Flyers · Social Creative',
+    description: 'A sharp, information-led flyer treatment designed for quick reading across digital channels.',
+    tags: ['Social Creative', 'Layout Design', 'Content Hierarchy'],
+    url: 'https://i.ibb.co/zTN4Yz9y/Flyer-Wise-Bytes.png',
+    image: 'https://i.ibb.co/zTN4Yz9y/Flyer-Wise-Bytes.png',
+  },
+  {
+    name: 'Ilm Kosh',
+    category: 'Logos · Education',
+    description: 'A memorable identity mark shaped around learning, knowledge, and an approachable educational voice.',
+    tags: ['Logo Identity', 'Brand Mark', 'Education Brand'],
+    url: 'https://i.ibb.co/FLxV9CJv/Ilm-Kosh.png',
+    image: 'https://i.ibb.co/FLxV9CJv/Ilm-Kosh.png',
+  },
+  {
+    name: 'Lumine X',
+    category: 'Logos · Technology',
+    description: 'A luminous, modern logo direction for a technology brand with a confident digital personality.',
+    tags: ['Logo Identity', 'Tech Branding', 'Visual System'],
+    url: 'https://i.ibb.co/DPwwFrpD/Lumine-X.png',
+    image: 'https://i.ibb.co/DPwwFrpD/Lumine-X.png',
+  },
+  {
+    name: 'Scholar Nation',
+    category: 'Logos · Education',
+    description: 'A clear and credible identity concept for a student-first learning community.',
+    tags: ['Logo Identity', 'Brand Mark', 'Community Brand'],
+    url: 'https://i.ibb.co/gZkjcmb3/Scholar-Nation.png',
+    image: 'https://i.ibb.co/gZkjcmb3/Scholar-Nation.png',
+  },
+  {
+    name: 'The Threaded Mess',
+    category: 'Logos · Lifestyle',
+    description: 'A distinctive identity with a crafted, expressive feel for a design-led lifestyle label.',
+    tags: ['Logo Identity', 'Lifestyle Brand', 'Art Direction'],
+    url: 'https://i.ibb.co/nND27ZHm/The-Threaded-Mess.png',
+    image: 'https://i.ibb.co/nND27ZHm/The-Threaded-Mess.png',
+  },
+  {
+    name: 'Verdura',
+    category: 'Logos · Wellness',
+    description: 'A fresh, nature-led mark for a wellness identity that feels calm, premium, and contemporary.',
+    tags: ['Logo Identity', 'Wellness Brand', 'Brand Mark'],
+    url: 'https://i.ibb.co/Q31zMgYt/Verdura.png',
+    image: 'https://i.ibb.co/Q31zMgYt/Verdura.png',
+  },
+  {
+    name: 'Dodge Charger SRT Hellcat',
+    category: 'Car Posters · Automotive',
+    description: 'High-impact automotive poster artwork built around power, speed, and a cinematic visual mood.',
+    tags: ['Poster Design', 'Automotive Creative', 'Digital Art Direction'],
+    url: 'https://i.ibb.co/4RWcCP0s/Poster-Dodge-Charger-SRT-Hellcat.png',
+    image: 'https://i.ibb.co/4RWcCP0s/Poster-Dodge-Charger-SRT-Hellcat.png',
+  },
+  {
+    name: 'Lamborghini Huracan Tecnica',
+    category: 'Car Posters · Automotive',
+    description: 'A dramatic poster composition that gives the Huracan Tecnica a premium editorial presence.',
+    tags: ['Poster Design', 'Automotive Creative', 'Campaign Visual'],
+    url: 'https://i.ibb.co/WWxJsp2m/Poster-Lamborghini-Huracan-Tecnica.png',
+    image: 'https://i.ibb.co/WWxJsp2m/Poster-Lamborghini-Huracan-Tecnica.png',
+  },
+  {
+    name: 'Nissan GTR R35',
+    category: 'Car Posters · Automotive',
+    description: 'A bold performance poster with a night-drive energy and a strong machine-first composition.',
+    tags: ['Poster Design', 'Automotive Creative', 'Digital Art Direction'],
+    url: 'https://i.ibb.co/JjFVnynR/Poster-Nissan-GTR-R35.png',
+    image: 'https://i.ibb.co/JjFVnynR/Poster-Nissan-GTR-R35.png',
+  },
+  {
+    name: 'Ferrari SF90 Stradale',
+    category: 'Car Posters · Automotive',
+    description: 'A refined, high-performance poster treatment for Ferrari\'s hybrid supercar.',
+    tags: ['Poster Design', 'Automotive Creative', 'Premium Visuals'],
+    url: 'https://i.ibb.co/3mpyQnjq/Poster-Ferrari-SF90-Stradale.png',
+    image: 'https://i.ibb.co/3mpyQnjq/Poster-Ferrari-SF90-Stradale.png',
+  },
+  {
+    name: 'Porsche 911 GT3 RS',
+    category: 'Car Posters · Automotive',
+    description: 'A focused poster composition celebrating the precision and raw character of the GT3 RS.',
+    tags: ['Poster Design', 'Automotive Creative', 'Campaign Visual'],
+    url: 'https://i.ibb.co/B2yL0Yfr/Poster-Porche-911-GT3-RS.png',
+    image: 'https://i.ibb.co/B2yL0Yfr/Poster-Porche-911-GT3-RS.png',
+  },
+  {
+    name: 'Toyota Supra MK5',
+    category: 'Car Posters · Automotive',
+    description: 'A vivid poster artwork that turns the Supra MK5 into a sharp, collectible visual statement.',
+    tags: ['Poster Design', 'Automotive Creative', 'Digital Art Direction'],
+    url: 'https://i.ibb.co/Kjdq0cJs/Poster-Toyota-Supra-MK5.png',
+    image: 'https://i.ibb.co/Kjdq0cJs/Poster-Toyota-Supra-MK5.png',
+  },
+]
 
 export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState('development')
@@ -112,7 +217,7 @@ export default function ProjectsPage() {
                   </div>
 
                   <a href={project.url} target="_blank" rel="noreferrer" className="visit-link">
-                    Visit live site
+                    View artwork
                     <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                       <path d="M4 10L10 4M10 4H5M10 4V9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
