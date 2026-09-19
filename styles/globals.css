@@ -62,6 +62,10 @@ html {
   margin-bottom: 24px;
 }
 
+.brand-logo-compact {
+  filter: brightness(0) invert(1) !important;
+}
+
 /* Skip link for keyboard users */
 .skip-link {
   position: absolute;

@@ -221,9 +221,9 @@ export default function ClientLayout({
         .client-shell {
           display: flex;
           min-height: 100vh;
-          background: #f4f6fa;
-          color: #102e4a;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          background: #f7f4ee;
+          color: #0b234a;
+          font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         /* Sidebar matching Admin aesthetic */
@@ -521,7 +521,7 @@ export default function ClientLayout({
           top: 0;
           z-index: 50;
           height: 70px;
-          background: rgba(255, 255, 255, 0.94);
+          background: #f7f4ee;
           backdrop-filter: blur(12px);
           border-bottom: 1px solid #e3e7ee;
           display: flex;
@@ -560,9 +560,10 @@ export default function ClientLayout({
 
         .breadcrumb-title {
           margin: 0;
-          font-size: 1.25rem;
+          font-family: 'Averia Serif Libre', Georgia, serif;
+          font-size: 1.28rem;
           font-weight: 700;
-          color: #0d253f;
+          color: #0b234a;
         }
 
         .topbar-right {
@@ -685,6 +686,31 @@ export default function ClientLayout({
         @media (max-width: 580px) {
           .status-stage-pill {
             display: none;
+          }
+
+          .client-topbar {
+            gap: 10px;
+          }
+
+          .topbar-left,
+          .topbar-breadcrumb {
+            min-width: 0;
+          }
+
+          .breadcrumb-title {
+            max-width: 42vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .topbar-right {
+            gap: 6px;
+          }
+
+          .topbar-btn {
+            padding: 7px 9px;
+            font-size: 0.75rem;
           }
 
           .breadcrumb-title {

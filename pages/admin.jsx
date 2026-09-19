@@ -150,115 +150,125 @@ export default function AdminPage() {
           <title>Admin Operations Login | Collablit Solutions</title>
         </Head>
         <main className="admin-login-screen">
-          <div className="bg-glow top-glow" />
-          <div className="bg-glow bottom-glow" />
-
-          <header className="login-topbar">
-            <a href="/" className="back-link">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
-              <span>Back to Public Site</span>
-            </a>
-            <div className="security-tag">
-              <span className="sec-dot" />
-              <span>Operations Security Protocol</span>
+          <section className="login-brand-pane">
+            <div className="pane-glow" />
+            <div className="pane-inner">
+              <BrandLogo compact />
+              <p className="pane-eyebrow">Operations console</p>
+              <h2>Leads, ledger, and client work — managed with care.</h2>
+              <p className="pane-lead">
+                Sign in to review meeting requests, record income and expenses, and keep agency operations on track.
+              </p>
+              <ul className="pane-points">
+                <li><span className="point-mark" />Pipeline and booking status</li>
+                <li><span className="point-mark" />Income and expense ledger</li>
+                <li><span className="point-mark" />Authorized staff access only</li>
+              </ul>
             </div>
-          </header>
+          </section>
 
-          <div className="login-center-box">
-            <div className="login-card">
-              <div className="brand-wrap">
-                <BrandLogo compact />
-              </div>
-              <div className="login-header">
-                <div className="badge-pill">
-                  <span className="dot" />
-                  <span>OPERATIONS COMMAND</span>
-                </div>
-                <h1>Administrator Access</h1>
-                <p>Private command gateway for pipeline leads, ledger accounting, and operations.</p>
-              </div>
-
-              {loginError && (
-                <div className="error-banner">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                  <span>{loginError}</span>
-                </div>
-              )}
-
-              <form onSubmit={login} className="login-form">
-                <div className="input-field-group">
-                  <label>Administrator Username</label>
-                  <div className="input-wrap">
-                    <div className="input-icon">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                    </div>
-                    <input
-                      value={credentials.username}
-                      onChange={(e) =>
-                        setCredentials({ ...credentials, username: e.target.value })
-                      }
-                      placeholder="Enter administrator username"
-                      autoComplete="username"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="input-field-group">
-                  <label>Security Key / Password</label>
-                  <div className="input-wrap">
-                    <div className="input-icon">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                      </svg>
-                    </div>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={credentials.password}
-                      onChange={(e) =>
-                        setCredentials({ ...credentials, password: e.target.value })
-                      }
-                      placeholder="Enter admin password"
-                      autoComplete="current-password"
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle-btn"
-                      onClick={() => setShowPassword(!showPassword)}
-                      tabIndex={-1}
-                    >
-                      {showPassword ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
-                </div>
-
-                <button type="submit" className="login-action-btn">
-                  <span>Sign In to Command Center →</span>
-                </button>
-              </form>
-
-              <div className="card-footer-note">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="16" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12.01" y2="8" />
+          <section className="login-form-pane">
+            <header className="login-topbar">
+              <a href="/" className="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
                 </svg>
-                <span>Restricted access · Authorized Collablit personnel only.</span>
+                <span>Back to website</span>
+              </a>
+              <span className="security-tag">
+                <span className="sec-dot" />
+                Restricted access
+              </span>
+            </header>
+
+            <div className="login-center-box">
+              <div className="login-card">
+                <div className="mobile-brand">
+                  <BrandLogo compact />
+                </div>
+                <div className="login-header">
+                  <p className="badge-pill">Administrator</p>
+                  <h1>Sign in</h1>
+                  <p>Enter your operations username and password to continue.</p>
+                </div>
+
+                {loginError && (
+                  <div className="error-banner">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span>{loginError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={login} className="login-form">
+                  <div className="input-field-group">
+                    <label htmlFor="admin-username">Username</label>
+                    <div className="input-wrap">
+                      <div className="input-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                      </div>
+                      <input
+                        id="admin-username"
+                        value={credentials.username}
+                        onChange={(e) =>
+                          setCredentials({ ...credentials, username: e.target.value })
+                        }
+                        placeholder="Administrator username"
+                        autoComplete="username"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="input-field-group">
+                    <label htmlFor="admin-password">Password</label>
+                    <div className="input-wrap">
+                      <div className="input-icon">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                      </div>
+                      <input
+                        id="admin-password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={credentials.password}
+                        onChange={(e) =>
+                          setCredentials({ ...credentials, password: e.target.value })
+                        }
+                        placeholder="Enter password"
+                        autoComplete="current-password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => setShowPassword(!showPassword)}
+                        tabIndex={-1}
+                      >
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="login-action-btn">
+                    Continue to dashboard
+                  </button>
+                </form>
+
+                <p className="card-footer-note">
+                  This area is for Collablit staff only. Client work lives in the client portal.
+                </p>
               </div>
             </div>
-          </div>
+          </section>
           <style jsx>{loginStyles}</style>
         </main>
       </>
@@ -271,8 +281,8 @@ export default function AdminPage() {
         <title>Admin Overview | Collablit Solutions</title>
       </Head>
       <AdminLayout
-        title="Overview & Pulse"
-        kicker="Collablit Command"
+        title="Operations overview"
+        kicker="Admin"
         onRefresh={loadData}
         onLogout={logout}
         loading={loading}
@@ -281,8 +291,8 @@ export default function AdminPage() {
           {/* Welcome Intro Header */}
           <div className="welcome-banner">
             <div>
-              <h2>Welcome to Agency Operations</h2>
-              <p>Real-time telemetry across pipeline enquiries, income ledger, and client progress.</p>
+              <h2>Good to have you in.</h2>
+              <p>Meeting requests, revenue, and expenses — a clear picture of the agency today.</p>
             </div>
             <div className="banner-stats">
               <div className="banner-stat-item">
@@ -650,175 +660,209 @@ export default function AdminPage() {
 const loginStyles = `
   .admin-login-screen {
     min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(360px, 1.08fr);
+    background: #f7f4ee;
+    color: #0b234a;
+  }
+
+  .login-brand-pane {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(165deg, rgba(11, 35, 74, 0.94) 0%, rgba(7, 20, 34, 0.9) 100%), #0b234a;
+    color: #fff;
+    padding: 48px 52px;
+    display: flex;
+    align-items: center;
+  }
+
+  .pane-glow {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    right: -140px;
+    bottom: -80px;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.28) 0%, transparent 68%);
+    pointer-events: none;
+  }
+
+  .pane-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+  }
+
+  .pane-inner :global(.brand-logo) {
+    display: block;
+    width: 168px;
+    height: 42px;
+    object-fit: contain;
+    object-position: left center;
+    filter: brightness(0) invert(1);
+    margin-bottom: 36px;
+  }
+
+  .pane-eyebrow {
+    margin: 0 0 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c9a227;
+  }
+
+  .pane-inner h2 {
+    margin: 0 0 16px;
+    font-family: 'Averia Serif Libre', Georgia, serif;
+    font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+    line-height: 1.25;
+    font-weight: 700;
+  }
+
+  .pane-lead {
+    margin: 0 0 28px;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .pane-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    position: relative;
-    background: #071422;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    overflow: hidden;
+    gap: 12px;
   }
 
-  .bg-glow {
-    position: absolute;
+  .pane-points li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .point-mark {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    pointer-events: none;
-    filter: blur(80px);
-    opacity: 0.45;
+    background: #c9a227;
+    box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.18);
+    flex-shrink: 0;
   }
 
-  .top-glow {
-    width: 450px;
-    height: 450px;
-    top: -120px;
-    right: -100px;
-    background: radial-gradient(circle, rgba(211, 155, 69, 0.28) 0%, rgba(13, 37, 63, 0) 70%);
-  }
-
-  .bottom-glow {
-    width: 450px;
-    height: 450px;
-    bottom: -120px;
-    left: -100px;
-    background: radial-gradient(circle, rgba(23, 59, 94, 0.4) 0%, rgba(7, 20, 34, 0) 70%);
+  .login-form-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   .login-topbar {
-    position: relative;
-    z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 36px;
+    padding: 28px 40px 0;
   }
 
   .back-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #3d5a80;
     text-decoration: none;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 600;
-    transition: all 0.2s ease;
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid #e4ddd0;
+    background: #fff;
   }
 
   .back-link:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.16);
+    color: #0b234a;
+    border-color: #c9a227;
   }
 
   .security-tag {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.55);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 6px 12px;
-    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #5c6b7e;
   }
 
   .sec-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #d39b45;
-    box-shadow: 0 0 6px #d39b45;
+    background: #c9a227;
   }
 
   .login-center-box {
-    position: relative;
-    z-index: 10;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 20px 60px;
+    padding: 32px 40px 56px;
   }
 
   .login-card {
-    width: min(460px, 100%);
-    background: #0d2136;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 18px;
-    padding: 42px 38px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-    display: flex;
-    flex-direction: column;
+    width: min(420px, 100%);
   }
 
-  .brand-wrap {
+  .mobile-brand {
+    display: none;
     margin-bottom: 22px;
   }
 
-  .brand-wrap :global(.brand-logo) {
-    display: block;
-    width: 155px;
-    height: 40px;
+  .mobile-brand :global(.brand-logo) {
+    width: 148px;
+    height: 38px;
     object-fit: contain;
     object-position: left center;
-    filter: brightness(0) invert(1);
+    filter: none !important;
   }
 
   .login-header {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .badge-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(211, 155, 69, 0.12);
-    border: 1px solid rgba(211, 155, 69, 0.28);
-    color: #e2ad5c;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    margin: 0 0 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .badge-pill .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #d39b45;
-    box-shadow: 0 0 6px #d39b45;
+    color: #a07b1c;
   }
 
   .login-header h1 {
     margin: 0 0 8px;
-    font-size: 1.85rem;
+    font-family: 'Averia Serif Libre', Georgia, serif;
+    font-size: 2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #0b234a;
   }
 
   .login-header p {
     margin: 0;
-    font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.65);
-    line-height: 1.5;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #5c6b7e;
   }
 
   .error-banner {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(239, 68, 68, 0.14);
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    color: #fca5a5;
-    padding: 11px 14px;
-    border-radius: 8px;
-    font-size: 0.84rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.86rem;
     margin-bottom: 18px;
   }
 
@@ -836,8 +880,8 @@ const loginStyles = `
 
   .input-field-group label {
     font-size: 0.82rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    font-weight: 700;
+    color: #0b234a;
   }
 
   .input-wrap {
@@ -849,32 +893,25 @@ const loginStyles = `
   .input-icon {
     position: absolute;
     left: 14px;
-    color: rgba(255, 255, 255, 0.4);
+    color: #8a97a8;
     pointer-events: none;
     display: flex;
-    align-items: center;
   }
 
   .input-wrap input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 9px;
-    padding: 13px 48px 13px 44px;
-    font-size: 0.92rem;
-    color: #fff;
+    background: #fff;
+    border: 1px solid #ddd4c4;
+    border-radius: 10px;
+    padding: 13px 52px 13px 44px;
+    font-size: 0.95rem;
+    color: #0b234a;
     outline: none;
-    transition: all 0.2s ease;
   }
 
   .input-wrap input:focus {
-    border-color: #d39b45;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 3px rgba(211, 155, 69, 0.2);
-  }
-
-  .input-wrap input::placeholder {
-    color: rgba(255, 255, 255, 0.32);
+    border-color: #c9a227;
+    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
   }
 
   .password-toggle-btn {
@@ -882,66 +919,62 @@ const loginStyles = `
     right: 12px;
     background: transparent;
     border: 0;
-    color: rgba(255, 255, 255, 0.55);
+    color: #6b7a8d;
     font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
-    padding: 4px 6px;
   }
 
   .password-toggle-btn:hover {
-    color: #d39b45;
+    color: #0b234a;
   }
 
   .login-action-btn {
     margin-top: 6px;
-    background: linear-gradient(135deg, #d39b45 0%, #b87c28 100%);
-    color: #071422;
+    background: #0b234a;
+    color: #fff;
     border: 0;
-    border-radius: 9px;
+    border-radius: 10px;
     padding: 14px;
-    font-size: 0.94rem;
+    font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 18px rgba(211, 155, 69, 0.3);
+    box-shadow: 0 10px 24px rgba(11, 35, 74, 0.18);
   }
 
   .login-action-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(211, 155, 69, 0.45);
+    background: #16345f;
   }
 
   .card-footer-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.78rem;
-    line-height: 1.45;
+    margin: 24px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid #eadfcd;
+    color: #6b7a8d;
+    font-size: 0.82rem;
+    line-height: 1.5;
   }
 
-  .card-footer-note svg {
-    flex-shrink: 0;
-    color: #d39b45;
-    margin-top: 2px;
+  @media (max-width: 900px) {
+    .admin-login-screen {
+      grid-template-columns: 1fr;
+    }
+    .login-brand-pane {
+      display: none;
+    }
+    .mobile-brand {
+      display: block;
+    }
   }
 
   @media (max-width: 540px) {
-    .login-topbar {
-      padding: 18px 20px;
-    }
-    .security-tag {
-      display: none;
-    }
-    .login-card {
-      padding: 30px 24px;
+    .login-topbar,
+    .login-center-box {
+      padding-left: 20px;
+      padding-right: 20px;
     }
     .login-header h1 {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
     }
   }
 `
@@ -952,24 +985,25 @@ const styles = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 22px;
   }
 
-  /* Welcome Banner */
   .welcome-banner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #0d253f 0%, #173b5e 100%);
+    background: linear-gradient(135deg, #0b234a 0%, #16345f 100%);
     color: #fff;
-    padding: 24px 28px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(13, 37, 63, 0.12);
+    padding: 28px 32px;
+    border-radius: 16px;
+    border: 1px solid rgba(201, 162, 39, 0.22);
+    box-shadow: 0 18px 40px rgba(11, 35, 74, 0.14);
   }
 
   .welcome-banner h2 {
     margin: 0 0 6px;
-    font-size: 1.5rem;
+    font-family: 'Averia Serif Libre', Georgia, serif;
+    font-size: 1.55rem;
     font-weight: 700;
     color: #ffffff;
   }
@@ -1025,13 +1059,13 @@ const styles = `
 
   .stat-card {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border: 1px solid #eadfcd;
+    border-radius: 14px;
     padding: 20px 22px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 24px rgba(11, 35, 74, 0.04);
+    border-top: 3px solid #c9a227;
   }
 
   .stat-card:hover {
@@ -1099,9 +1133,10 @@ const styles = `
   }
 
   .highlight-card {
-    background: #0d253f;
-    border-color: #0d253f;
+    background: #0b234a;
+    border-color: #0b234a;
     color: #fff;
+    border-top-color: #c9a227;
   }
 
   .highlight-card .card-kicker {
@@ -1148,10 +1183,10 @@ const styles = `
   /* Panels Common */
   .panel {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border: 1px solid #eadfcd;
+    border-radius: 14px;
     padding: 24px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 24px rgba(11, 35, 74, 0.04);
   }
 
   .panel-header {
@@ -1173,9 +1208,10 @@ const styles = `
 
   .panel-header h3 {
     margin: 0;
+    font-family: 'Averia Serif Libre', Georgia, serif;
     font-size: 1.18rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #0b234a;
   }
 
   .count-pill {

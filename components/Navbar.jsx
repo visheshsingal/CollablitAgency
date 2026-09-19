@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import BrandLogo from './BrandLogo.jsx'
 
 export default function Navbar() {
   const router = useRouter()
@@ -31,11 +32,7 @@ export default function Navbar() {
 
       <nav className="nav-inner" aria-label="Primary">
         <Link href="/" className="brand" aria-label="Collablit Solutions home">
-          <img
-            src="https://plain-apac-prod-public.komododecks.com/202609/07/8eX4Xx73q4wTa2vJrgyB/image.png"
-            alt="Collablit Solutions logo"
-            className="brand-logo"
-          />
+          <BrandLogo navbar />
         </Link>
 
         <ul className="nav-links">
@@ -119,11 +116,11 @@ export default function Navbar() {
         }
 
         .brand { display:inline-flex; align-items:center; text-decoration:none; }
-        .brand-logo {
+        .brand :global(.brand-logo) {
           display: block;
-          height: 52px;
+          height: 38px !important;
           width: auto;
-          max-width: 220px;
+          max-width: 170px !important;
           object-fit: contain;
           filter: drop-shadow(0 5px 10px rgba(11, 35, 74, 0.08));
         }

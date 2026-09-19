@@ -81,11 +81,10 @@ export default function ClientDashboardPage() {
           {/* Welcome Hero Banner */}
           <section className="welcome-banner">
             <div className="welcome-copy">
-              <span className="welcome-tag">COLLABLIT CLIENT SPACE</span>
+              <span className="welcome-tag">Your workspace</span>
               <h1>Welcome back, {client.name || 'there'}.</h1>
               <p>
-                Track live progress on your agency engagement with <strong>Collablit Solutions</strong>.
-                All project documents, milestones, and meeting links are centralized here.
+                Follow progress with <strong>Collablit Solutions</strong> — documents, milestones, and meeting details live here.
               </p>
             </div>
 
@@ -364,18 +363,18 @@ const stateStyles = `
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: #071422;
-    color: #fff;
+    background: #f7f4ee;
+    color: #0b234a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   .state-card {
-    background: #0d2136;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #fff;
+    border: 1px solid #eadfcd;
     border-radius: 16px;
     padding: 42px 36px;
     text-align: center;
     max-width: 420px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 18px 40px rgba(11, 35, 74, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -383,35 +382,35 @@ const stateStyles = `
   }
   .state-card h2 {
     margin: 0;
-    color: #ffffff;
+    color: #0b234a;
+    font-family: 'Averia Serif Libre', Georgia, serif;
     font-size: 1.45rem;
     font-weight: 700;
   }
   .state-card p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.65);
+    color: #5c6b7e;
     font-size: 0.9rem;
     line-height: 1.5;
   }
   .state-btn {
     margin-top: 8px;
-    background: linear-gradient(135deg, #d39b45 0%, #b87c28 100%);
-    color: #071422;
+    background: #0b234a;
+    color: #fff;
     border: 0;
     padding: 11px 22px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.15s ease;
   }
   .state-btn:hover {
-    transform: translateY(-1px);
+    background: #16345f;
   }
   .spinner {
     width: 38px;
     height: 38px;
-    border: 3px solid rgba(255, 255, 255, 0.12);
-    border-top-color: #d39b45;
+    border: 3px solid #eadfcd;
+    border-top-color: #c9a227;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -446,11 +445,12 @@ const styles = `
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #0d253f 0%, #173b5e 100%);
+    background: linear-gradient(135deg, #0b234a 0%, #16345f 100%);
     color: #ffffff;
-    padding: 30px 34px;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(13, 37, 63, 0.12);
+    padding: 32px 34px;
+    border-radius: 16px;
+    border: 1px solid rgba(201, 162, 39, 0.22);
+    box-shadow: 0 18px 40px rgba(11, 35, 74, 0.14);
     gap: 28px;
   }
 
@@ -459,10 +459,10 @@ const styles = `
   }
 
   .welcome-tag {
-    font-size: 0.68rem;
-    font-weight: 800;
+    font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 0.14em;
-    color: #d39b45;
+    color: #c9a227;
     text-transform: uppercase;
     display: block;
     margin-bottom: 8px;
@@ -470,6 +470,7 @@ const styles = `
 
   .welcome-copy h1 {
     margin: 0 0 10px;
+    font-family: 'Averia Serif Libre', Georgia, serif;
     font-size: 1.85rem;
     font-weight: 700;
     color: #ffffff;
@@ -553,12 +554,13 @@ const styles = `
 
   .metric-box {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border: 1px solid #eadfcd;
+    border-radius: 14px;
     padding: 18px 22px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 24px rgba(11, 35, 74, 0.04);
+    border-top: 3px solid #c9a227;
   }
 
   .box-label {
@@ -601,10 +603,10 @@ const styles = `
 
   .panel {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border: 1px solid #eadfcd;
+    border-radius: 14px;
     padding: 24px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 24px rgba(11, 35, 74, 0.04);
   }
 
   .panel-header {
@@ -626,9 +628,10 @@ const styles = `
 
   .panel-header h3 {
     margin: 0;
+    font-family: 'Averia Serif Libre', Georgia, serif;
     font-size: 1.18rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #0b234a;
   }
 
   .status-indicator {
@@ -908,18 +911,17 @@ const styles = `
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #173b5e;
+    background: #0b234a;
     color: #fff;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 700;
-    transition: background 0.16s ease;
   }
 
   .join-meet-btn:hover {
-    background: #0d253f;
+    background: #16345f;
   }
 
   .link-pending {
