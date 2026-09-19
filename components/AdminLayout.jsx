@@ -18,12 +18,13 @@ export default function AdminLayout({
     {
       href: '/admin',
       label: 'Dashboard Overview',
+      badge: 'Main',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="3" width="7" height="9" rx="1" />
-          <rect x="14" y="3" width="7" height="5" rx="1" />
-          <rect x="14" y="12" width="7" height="9" rx="1" />
-          <rect x="3" y="16" width="7" height="5" rx="1" />
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="7" height="9" rx="1.5" />
+          <rect x="14" y="3" width="7" height="5" rx="1.5" />
+          <rect x="14" y="12" width="7" height="9" rx="1.5" />
+          <rect x="3" y="16" width="7" height="5" rx="1.5" />
         </svg>
       ),
     },
@@ -31,10 +32,10 @@ export default function AdminLayout({
       href: '/admin-leads',
       label: 'Leads & Inquiries',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
           <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
       ),
@@ -43,20 +44,10 @@ export default function AdminLayout({
       href: '/admin-finance',
       label: 'Finance & Ledger',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-      ),
-    },
-    {
-      href: '/admin-clients',
-      label: 'Client Portals',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-          <line x1="8" y1="21" x2="16" y2="21" />
-          <line x1="12" y1="17" x2="12" y2="21" />
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="6" x2="12" y2="18" />
+          <path d="M15 9.5a2.5 2.5 0 0 0-5 0c0 1.5 1.5 2.5 3 3s3 1.5 3 3a2.5 2.5 0 0 1-5 0" />
         </svg>
       ),
     },
@@ -69,59 +60,71 @@ export default function AdminLayout({
       {/* Mobile Overlay */}
       {mobileOpen && <div className="sidebar-backdrop" onClick={closeMobile} />}
 
-      {/* Left Sidebar */}
+      {/* Modern Redesigned Left Sidebar */}
       <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
-        <div className="sidebar-top">
+        {/* Glow ambient background element */}
+        <div className="sidebar-glow-accent" />
+
+        {/* Brand Header */}
+        <div className="sidebar-header">
           <div className="logo-box">
             <BrandLogo compact />
           </div>
-          <div className="badge-kicker">
-            <span className="dot" />
-            Operations Command
+          <div className="brand-badge-row">
+            <span className="live-indicator">
+              <span className="live-dot" />
+            </span>
+            <span className="brand-tag">Operations Console</span>
           </div>
         </div>
 
-        <nav className="sidebar-menu">
-          <p className="menu-group-label">MAIN NAVIGATION</p>
-          {navItems.map((item) => {
-            const isActive = router.pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`menu-link ${isActive ? 'active' : ''}`}
-                onClick={closeMobile}
-              >
-                <span className="icon-wrap">{item.icon}</span>
-                <span className="link-text">{item.label}</span>
-                {isActive && <span className="active-pill" />}
-              </Link>
-            )
-          })}
+        {/* Navigation List - Only 3 requested items */}
+        <div className="nav-container">
+          <div className="nav-group-title">
+            <span>MAIN NAVIGATION</span>
+          </div>
 
-          <p className="menu-group-label" style={{ marginTop: '24px' }}>QUICK ACTIONS</p>
-          <Link href="/" target="_blank" className="menu-link sub-link">
-            <span className="icon-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </span>
-            <span className="link-text">Public Website</span>
-          </Link>
-        </nav>
+          <nav className="nav-list">
+            {navItems.map((item) => {
+              const isActive = router.pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`nav-link-item ${isActive ? 'is-active' : ''}`}
+                  onClick={closeMobile}
+                >
+                  <div className={`nav-icon-box ${isActive ? 'icon-active' : ''}`}>
+                    {item.icon}
+                  </div>
+                  <span className="nav-label-text">{item.label}</span>
+                  {isActive && <div className="active-glow-pill" />}
+                  {item.badge && !isActive && (
+                    <span className="nav-badge">{item.badge}</span>
+                  )}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
 
-        <div className="sidebar-footer">
-          <div className="admin-profile">
-            <div className="profile-avatar">AD</div>
-            <div className="profile-meta">
-              <strong>Admin Team</strong>
-              <small>Collablit Core</small>
+        {/* Sidebar Footer / Profile Card */}
+        <div className="sidebar-bottom-panel">
+          <div className="admin-user-card">
+            <div className="user-avatar-wrap">
+              <div className="user-avatar">
+                <span>AD</span>
+              </div>
+              <span className="avatar-status-dot" />
+            </div>
+            <div className="user-info">
+              <strong className="user-name">Admin Operations</strong>
+              <span className="user-role">Super Admin</span>
             </div>
           </div>
+
           {onLogout && (
-            <button className="sidebar-logout-btn" onClick={onLogout} title="Sign out of operations">
+            <button className="signout-action-btn" onClick={onLogout} title="Sign out of panel">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />
@@ -207,11 +210,11 @@ export default function AdminLayout({
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Sidebar Styling */
+        /* Modern Premium Sidebar */
         .admin-sidebar {
-          width: 260px;
+          width: 270px;
           flex-shrink: 0;
-          background: #0d253f;
+          background: #091726;
           color: #fff;
           display: flex;
           flex-direction: column;
@@ -219,170 +222,271 @@ export default function AdminLayout({
           top: 0;
           height: 100vh;
           z-index: 80;
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 2px 0 18px rgba(10, 30, 50, 0.12);
+          border-right: 1px solid rgba(255, 255, 255, 0.07);
+          box-shadow: 4px 0 24px rgba(5, 14, 25, 0.25);
+          overflow: hidden;
         }
 
-        .sidebar-top {
-          padding: 24px 20px 18px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        /* Ambient glow for depth */
+        .sidebar-glow-accent {
+          position: absolute;
+          top: -60px;
+          left: -40px;
+          width: 220px;
+          height: 220px;
+          background: radial-gradient(circle, rgba(211, 155, 69, 0.12) 0%, rgba(13, 37, 63, 0) 70%);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* Header Section */
+        .sidebar-header {
+          position: relative;
+          z-index: 1;
+          padding: 26px 22px 20px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
         }
 
         .logo-box :global(.brand-logo) {
           display: block;
-          width: 140px;
+          width: 145px;
           height: 38px;
           object-fit: contain;
           object-position: left center;
           filter: brightness(0) invert(1);
+          transition: transform 0.2s ease;
         }
 
-        .badge-kicker {
+        .logo-box:hover :global(.brand-logo) {
+          transform: scale(1.02);
+        }
+
+        .brand-badge-row {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          margin-top: 10px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          color: #d39b45;
-          background: rgba(211, 155, 69, 0.12);
+          gap: 7px;
+          margin-top: 12px;
+          background: rgba(211, 155, 69, 0.08);
+          border: 1px solid rgba(211, 155, 69, 0.2);
           padding: 4px 10px;
           border-radius: 20px;
-          border: 1px solid rgba(211, 155, 69, 0.25);
         }
 
-        .dot {
+        .live-indicator {
+          display: flex;
+          align-items: center;
+        }
+
+        .live-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
           background: #d39b45;
-          box-shadow: 0 0 6px #d39b45;
+          box-shadow: 0 0 8px #d39b45;
         }
 
-        .sidebar-menu {
+        .brand-tag {
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #e2ad5c;
+        }
+
+        /* Navigation List */
+        .nav-container {
+          position: relative;
+          z-index: 1;
           flex: 1;
-          padding: 20px 14px;
+          padding: 22px 14px;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
-          gap: 4px;
         }
 
-        .menu-group-label {
-          font-size: 0.68rem;
+        .nav-group-title {
+          padding: 0 10px 10px;
+        }
+
+        .nav-group-title span {
+          font-size: 0.67rem;
           font-weight: 800;
-          letter-spacing: 0.12em;
-          color: rgba(255, 255, 255, 0.42);
-          margin: 0 0 8px 10px;
+          letter-spacing: 0.14em;
+          color: rgba(255, 255, 255, 0.35);
+          text-transform: uppercase;
         }
 
-        .menu-link {
+        .nav-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .nav-link-item {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 10px 12px;
-          border-radius: 8px;
-          color: rgba(255, 255, 255, 0.75);
+          gap: 13px;
+          padding: 11px 14px;
+          border-radius: 10px;
+          color: rgba(255, 255, 255, 0.72);
           text-decoration: none;
           font-size: 0.88rem;
           font-weight: 600;
-          transition: all 0.18s ease;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
+          border: 1px solid transparent;
         }
 
-        .menu-link:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.09);
+        .nav-link-item:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.06);
+          transform: translateX(2px);
         }
 
-        .menu-link.active {
-          color: #fff;
-          background: #173b5e;
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+        .nav-link-item.is-active {
+          color: #ffffff;
+          background: linear-gradient(90deg, rgba(211, 155, 69, 0.16) 0%, rgba(23, 59, 94, 0.35) 100%);
+          border-color: rgba(211, 155, 69, 0.28);
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
         }
 
-        .sub-link {
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        .icon-wrap {
+        .nav-icon-box {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #d39b45;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.04);
+          color: rgba(255, 255, 255, 0.65);
+          transition: all 0.2s ease;
         }
 
-        .active-pill {
-          margin-left: auto;
-          width: 5px;
-          height: 14px;
+        .nav-link-item:hover .nav-icon-box {
+          background: rgba(211, 155, 69, 0.12);
+          color: #e2ad5c;
+        }
+
+        .icon-active {
+          background: rgba(211, 155, 69, 0.22) !important;
+          color: #d39b45 !important;
+          box-shadow: 0 0 10px rgba(211, 155, 69, 0.25);
+        }
+
+        .nav-label-text {
+          flex: 1;
+          letter-spacing: 0.01em;
+        }
+
+        .active-glow-pill {
+          width: 4px;
+          height: 18px;
+          border-radius: 4px;
           background: #d39b45;
-          border-radius: 3px;
+          box-shadow: 0 0 8px #d39b45;
         }
 
-        .sidebar-footer {
+        .nav-badge {
+          font-size: 0.68rem;
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.45);
+          background: rgba(255, 255, 255, 0.06);
+          padding: 2px 7px;
+          border-radius: 6px;
+        }
+
+        /* Sidebar Bottom Panel */
+        .sidebar-bottom-panel {
+          position: relative;
+          z-index: 1;
           padding: 16px 14px 20px;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
-          background: rgba(0, 0, 0, 0.12);
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          background: rgba(0, 0, 0, 0.22);
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .admin-profile {
+        .admin-user-card {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 6px 8px;
+          gap: 12px;
+          padding: 8px 10px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 10px;
         }
 
-        .profile-avatar {
-          width: 34px;
-          height: 34px;
-          border-radius: 8px;
-          background: #d39b45;
-          color: #0d253f;
+        .user-avatar-wrap {
+          position: relative;
+        }
+
+        .user-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 9px;
+          background: linear-gradient(135deg, #d39b45 0%, #ad702c 100%);
+          color: #091726;
           font-weight: 800;
-          font-size: 0.82rem;
+          font-size: 0.84rem;
           display: grid;
           place-items: center;
+          box-shadow: 0 2px 8px rgba(211, 155, 69, 0.3);
         }
 
-        .profile-meta strong {
+        .avatar-status-dot {
+          position: absolute;
+          bottom: -1px;
+          right: -1px;
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: #10b981;
+          border: 2px solid #091726;
+        }
+
+        .user-info {
+          overflow: hidden;
+        }
+
+        .user-name {
           display: block;
           font-size: 0.84rem;
-          color: #fff;
+          color: #ffffff;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
-        .profile-meta small {
+        .user-role {
           display: block;
           font-size: 0.72rem;
-          color: rgba(255, 255, 255, 0.5);
+          color: #94a3b8;
+          margin-top: 1px;
         }
 
-        .sidebar-logout-btn {
+        .signout-action-btn {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
           width: 100%;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: rgba(255, 255, 255, 0.75);
-          padding: 9px 12px;
-          border-radius: 7px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.7);
+          padding: 10px 14px;
+          border-radius: 8px;
           font-size: 0.82rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.16s ease;
+          transition: all 0.18s ease;
         }
 
-        .sidebar-logout-btn:hover {
-          background: rgba(220, 53, 69, 0.18);
-          border-color: rgba(220, 53, 69, 0.4);
-          color: #ff8c8c;
+        .signout-action-btn:hover {
+          background: rgba(239, 68, 68, 0.15);
+          border-color: rgba(239, 68, 68, 0.35);
+          color: #fca5a5;
         }
 
         /* Admin Body */
@@ -528,20 +632,20 @@ export default function AdminLayout({
         @media (max-width: 960px) {
           .admin-sidebar {
             position: fixed;
-            left: -280px;
+            left: -290px;
             transition: left 0.25s ease;
             box-shadow: none;
           }
 
           .admin-sidebar.open {
             left: 0;
-            box-shadow: 6px 0 25px rgba(0, 0, 0, 0.35);
+            box-shadow: 6px 0 25px rgba(0, 0, 0, 0.45);
           }
 
           .sidebar-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(13, 37, 63, 0.6);
+            background: rgba(9, 23, 38, 0.65);
             backdrop-filter: blur(4px);
             z-index: 75;
           }

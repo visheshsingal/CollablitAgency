@@ -364,48 +364,54 @@ const stateStyles = `
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: #f7f6f2;
+    background: #071422;
+    color: #fff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   .state-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 40px;
+    background: #0d2136;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 42px 36px;
     text-align: center;
-    max-width: 400px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    max-width: 420px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .state-card h2 {
     margin: 0;
-    color: #0d253f;
-    font-size: 1.4rem;
+    color: #ffffff;
+    font-size: 1.45rem;
+    font-weight: 700;
   }
   .state-card p {
     margin: 0;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.65);
     font-size: 0.9rem;
     line-height: 1.5;
   }
   .state-btn {
     margin-top: 8px;
-    background: #0d253f;
-    color: #fff;
+    background: linear-gradient(135deg, #d39b45 0%, #b87c28 100%);
+    color: #071422;
     border: 0;
-    padding: 10px 18px;
-    border-radius: 6px;
+    padding: 11px 22px;
+    border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .state-btn:hover {
+    transform: translateY(-1px);
   }
   .spinner {
-    width: 34px;
-    height: 34px;
-    border: 3px solid #cbd5e1;
-    border-top-color: #0d253f;
+    width: 38px;
+    height: 38px;
+    border: 3px solid rgba(255, 255, 255, 0.12);
+    border-top-color: #d39b45;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -413,15 +419,16 @@ const stateStyles = `
     to { transform: rotate(360deg); }
   }
   .error-icon {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #fee2e2;
-    color: #dc2626;
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
     display: grid;
     place-items: center;
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 `
 

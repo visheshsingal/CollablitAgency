@@ -147,60 +147,117 @@ export default function AdminPage() {
     return (
       <>
         <Head>
-          <title>Admin Login | Collablit Solutions</title>
+          <title>Admin Operations Login | Collablit Solutions</title>
         </Head>
         <main className="admin-login-screen">
-          <div className="login-card">
-            <div className="brand-wrap">
-              <BrandLogo />
+          <div className="bg-glow top-glow" />
+          <div className="bg-glow bottom-glow" />
+
+          <header className="login-topbar">
+            <a href="/" className="back-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span>Back to Public Site</span>
+            </a>
+            <div className="security-tag">
+              <span className="sec-dot" />
+              <span>Operations Security Protocol</span>
             </div>
-            <div className="login-header">
-              <span className="login-tag">AGENCY CONSOLE</span>
-              <h1>Operations Access</h1>
-              <p>Secure command centre for leads, cashflow, and portals.</p>
-            </div>
-            <form onSubmit={login} className="login-form">
-              <div className="field">
-                <label>Username</label>
-                <input
-                  value={credentials.username}
-                  onChange={(e) =>
-                    setCredentials({ ...credentials, username: e.target.value })
-                  }
-                  placeholder="Enter administrator username"
-                  autoComplete="username"
-                  required
-                />
+          </header>
+
+          <div className="login-center-box">
+            <div className="login-card">
+              <div className="brand-wrap">
+                <BrandLogo compact />
               </div>
-              <div className="field">
-                <label>Password</label>
-                <div className="password-input-wrap">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={credentials.password}
-                    onChange={(e) =>
-                      setCredentials({ ...credentials, password: e.target.value })
-                    }
-                    placeholder="Enter security key"
-                    autoComplete="current-password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="toggle-pass-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </button>
+              <div className="login-header">
+                <div className="badge-pill">
+                  <span className="dot" />
+                  <span>OPERATIONS COMMAND</span>
                 </div>
+                <h1>Administrator Access</h1>
+                <p>Private command gateway for pipeline leads, ledger accounting, and operations.</p>
               </div>
 
-              {loginError && <p className="error-alert">{loginError}</p>}
+              {loginError && (
+                <div className="error-banner">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <span>{loginError}</span>
+                </div>
+              )}
 
-              <button type="submit" className="login-btn">
-                Enter Dashboard
-              </button>
-            </form>
+              <form onSubmit={login} className="login-form">
+                <div className="input-field-group">
+                  <label>Administrator Username</label>
+                  <div className="input-wrap">
+                    <div className="input-icon">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </div>
+                    <input
+                      value={credentials.username}
+                      onChange={(e) =>
+                        setCredentials({ ...credentials, username: e.target.value })
+                      }
+                      placeholder="Enter administrator username"
+                      autoComplete="username"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="input-field-group">
+                  <label>Security Key / Password</label>
+                  <div className="input-wrap">
+                    <div className="input-icon">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </div>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={credentials.password}
+                      onChange={(e) =>
+                        setCredentials({ ...credentials, password: e.target.value })
+                      }
+                      placeholder="Enter admin password"
+                      autoComplete="current-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" className="login-action-btn">
+                  <span>Sign In to Command Center →</span>
+                </button>
+              </form>
+
+              <div className="card-footer-note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>Restricted access · Authorized Collablit personnel only.</span>
+              </div>
+            </div>
           </div>
           <style jsx>{loginStyles}</style>
         </main>
@@ -229,13 +286,13 @@ export default function AdminPage() {
             </div>
             <div className="banner-stats">
               <div className="banner-stat-item">
-                <span className="stat-label">Active Portals</span>
-                <span className="stat-num">{data.clients?.length || 0}</span>
+                <span className="stat-label">Total Leads</span>
+                <span className="stat-num">{data.bookings.length}</span>
               </div>
               <div className="banner-stat-divider" />
               <div className="banner-stat-item">
-                <span className="stat-label">Total Leads</span>
-                <span className="stat-num">{data.bookings.length}</span>
+                <span className="stat-label">Ledger Entries</span>
+                <span className="stat-num">{data.finance.length}</span>
               </div>
             </div>
           </div>
@@ -594,139 +651,298 @@ const loginStyles = `
   .admin-login-screen {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #071422;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: 0.45;
+  }
+
+  .top-glow {
+    width: 450px;
+    height: 450px;
+    top: -120px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(211, 155, 69, 0.28) 0%, rgba(13, 37, 63, 0) 70%);
+  }
+
+  .bottom-glow {
+    width: 450px;
+    height: 450px;
+    bottom: -120px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(23, 59, 94, 0.4) 0%, rgba(7, 20, 34, 0) 70%);
+  }
+
+  .login-topbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 36px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .back-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .security-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  .sec-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d39b45;
+    box-shadow: 0 0 6px #d39b45;
+  }
+
+  .login-center-box {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    background: radial-gradient(circle at 10% 20%, rgba(211, 155, 69, 0.12), transparent 45%),
-                radial-gradient(circle at 90% 80%, rgba(13, 37, 63, 0.08), transparent 45%),
-                #f4f6fa;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding: 24px 20px 60px;
   }
 
   .login-card {
-    width: min(440px, 100%);
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 42px 36px;
-    box-shadow: 0 20px 45px rgba(13, 37, 63, 0.1);
-    border: 1px solid #e2e8f0;
+    width: min(460px, 100%);
+    background: #0d2136;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 42px 38px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-wrap {
+    margin-bottom: 22px;
   }
 
   .brand-wrap :global(.brand-logo) {
     display: block;
     width: 155px;
-    height: 42px;
+    height: 40px;
     object-fit: contain;
     object-position: left center;
+    filter: brightness(0) invert(1);
   }
 
   .login-header {
-    margin-top: 24px;
     margin-bottom: 24px;
   }
 
-  .login-tag {
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(211, 155, 69, 0.12);
+    border: 1px solid rgba(211, 155, 69, 0.28);
+    color: #e2ad5c;
+    padding: 4px 10px;
+    border-radius: 20px;
     font-size: 0.68rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
-    color: #ad702c;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .badge-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d39b45;
+    box-shadow: 0 0 6px #d39b45;
   }
 
   .login-header h1 {
-    margin: 6px 0 8px;
-    font-size: 1.8rem;
+    margin: 0 0 8px;
+    font-size: 1.85rem;
     font-weight: 700;
-    color: #0d253f;
+    color: #ffffff;
   }
 
   .login-header p {
     margin: 0;
     font-size: 0.88rem;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.65);
     line-height: 1.5;
+  }
+
+  .error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    margin-bottom: 18px;
   }
 
   .login-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
   }
 
-  .field {
+  .input-field-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 7px;
   }
 
-  .field label {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #334155;
+  .input-field-group label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
   }
 
-  .field input {
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 0.92rem;
-    color: #0f172a;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.15s ease;
-  }
-
-  .field input:focus {
-    border-color: #0d253f;
-  }
-
-  .password-input-wrap {
+  .input-wrap {
     position: relative;
     display: flex;
+    align-items: center;
   }
 
-  .password-input-wrap input {
-    width: 100%;
-    padding-right: 60px;
-  }
-
-  .toggle-pass-btn {
+  .input-icon {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrap input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    padding: 13px 48px 13px 44px;
+    font-size: 0.92rem;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .input-wrap input:focus {
+    border-color: #d39b45;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(211, 155, 69, 0.2);
+  }
+
+  .input-wrap input::placeholder {
+    color: rgba(255, 255, 255, 0.32);
+  }
+
+  .password-toggle-btn {
+    position: absolute;
+    right: 12px;
     background: transparent;
     border: 0;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.55);
     font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
+    padding: 4px 6px;
   }
 
-  .error-alert {
-    margin: 0;
-    color: #dc2626;
-    background: #fee2e2;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.82rem;
+  .password-toggle-btn:hover {
+    color: #d39b45;
   }
 
-  .login-btn {
+  .login-action-btn {
     margin-top: 6px;
-    background: #0d253f;
-    color: #fff;
+    background: linear-gradient(135deg, #d39b45 0%, #b87c28 100%);
+    color: #071422;
     border: 0;
-    border-radius: 8px;
-    padding: 13px;
-    font-size: 0.95rem;
+    border-radius: 9px;
+    padding: 14px;
+    font-size: 0.94rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 18px rgba(211, 155, 69, 0.3);
   }
 
-  .login-btn:hover {
-    background: #173b5e;
+  .login-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(211, 155, 69, 0.45);
+  }
+
+  .card-footer-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .card-footer-note svg {
+    flex-shrink: 0;
+    color: #d39b45;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 540px) {
+    .login-topbar {
+      padding: 18px 20px;
+    }
+    .security-tag {
+      display: none;
+    }
+    .login-card {
+      padding: 30px 24px;
+    }
+    .login-header h1 {
+      font-size: 1.6rem;
+    }
   }
 `
 
